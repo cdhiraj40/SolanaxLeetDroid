@@ -171,7 +171,6 @@ const Content: FC = () => {
         <div className="profile">
             <div ref={div} className='input-container'>
                 <video src={videos} autoPlay loop muted />
-                <img src={temp}></img>
             <div ref={div} className="input-container">
                 <label>Enter your leetcode username:
                     <input type="text" ref={username} />

@@ -26,6 +26,7 @@ video {
     align-items: center;
     box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
     object-fit: contain;
+    margin-top: 20px;
 }
 
 .welcome-container>h1 {
@@ -41,6 +42,13 @@ video {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+.submit-btns {
+    margin-top: 5px;
+}
+
+.submit-btns .btn {
+    margin: 6px;
+}
 .welcome-btns {
     margin-top: 32px;
 }
@@ -48,6 +56,7 @@ video {
 .welcome-btns .btn {
     margin: 6px;
 }
+
 
 .fa-github {
     margin-left: 4px;
