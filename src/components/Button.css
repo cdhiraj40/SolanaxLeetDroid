@@ -1,0 +1,74 @@
+:root {
+  --primary: rgb(216, 2, 134);
+}
+
+.body{
+  color: blue;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn--outline {
+  background-color: transparent;
+  border: 2px solid rgb(216, 2, 134);
+  border-radius: 0;
+  padding: 18px 36px;
+  color: #fff;
+  padding: 8px 20px;
+  border: 1px solid var(--primary);
+  box-shadow: inset 0 0 0 0 #D80286;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+
+.btn--medium {
+  font-size: 16px;
+  color: #FFF;
+  border: 2px solid rgb(216, 2, 134);
+  border-radius: 0px;
+  padding: 12px 15px;
+  display: inline-block;
+  font-family: "Lucida Console", Monaco, monospace;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0 #9945FF;
+  background-color: linear-gradient(to right, #DC1FFF 0%, #03E1FF 51%, #14F195 33%);
+  -webkit-transition: ease-out 0.8s;
+  -moz-transition: ease-out 0.8s;
+  transition: ease-out 0.8s;
+}
+
+.btn--large {
+  padding: 12px 26px;
+  font-size: 20px;
+  color: #FFF;
+  border: 2px solid rgb(216, 2, 134);
+  border-radius: 0px;
+  padding: 17px 36px;
+  display: inline-block;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0 #D80286;
+  -webkit-transition: ease-out 0.8s;
+  -moz-transition: ease-out 0.8s;
+  transition: ease-out 0.8s;
+}
+
+.btn--large:hover,
+.btn--medium:hover {
+  box-shadow: inset 400px 50px 0 0 #03E1FF;
+}
