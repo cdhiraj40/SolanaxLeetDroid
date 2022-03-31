@@ -2,12 +2,11 @@ import { Button } from './Button';
 require('../App.css');
 import './Profile.css'
 import videos from "../assets/videos/welcome.mp4";
-import temp from "../assets/images/logos/logo-white.svg";
 import { AcSubmissionNum, AllQuestionsCount, RootObject, TotalSubmissionNum } from "../api/Interfaces/LeetCodeProfile"
 import PROFILE_QUERY from '../api/Queries/ProfileQuery'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, useAnchorWallet, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import {
     LedgerWalletAdapter,
     PhantomWalletAdapter,
@@ -17,12 +16,7 @@ import {
     SolletWalletAdapter,
     TorusWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
-import * as anchor from "@project-serum/anchor";
-import siteLogo from "../assets/images/main_logo.png";
 
-import {
-    Program, Provider, web3, BN,
-} from '@project-serum/anchor';
 import { clusterApiUrl, Connection } from '@solana/web3.js';
 import React, { FC, ReactNode, useEffect, useMemo, useRef } from 'react';
 import { ProfileCard } from './ProfileCard';
@@ -171,20 +165,20 @@ const Content: FC = () => {
         <div className="profile">
             <div ref={div} className='input-container'>
                 <video src={videos} autoPlay loop muted />
-            <div ref={div} className="input-container">
-                <label>Enter your leetcode username:
-                    <input type="text" ref={username} />
-                </label>
-                <Button className='get-profile' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={setButtonClick}>Get Profile</Button>
-                <ProfileCard
-                    username={profileUsername}
-                    profilePicUrl={profilePictureUrl}
-                    name={profileName} bio={profileBio}
-                    ranking={profileRanking}
-                    stars={profileStars}
-                    totalProblems={profileTotalProblems}
-                    problemSolved={profileCorrectProblemSolved} />
-            </div>
+                <div ref={div} className="input-container">
+                    <label>Enter your leetcode username:
+                        <input type="text" ref={username} />
+                    </label>
+                    <Button className='get-profile' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={setButtonClick}>Get Profile</Button>
+                    <ProfileCard
+                        username={profileUsername}
+                        profilePicUrl={profilePictureUrl}
+                        name={profileName} bio={profileBio}
+                        ranking={profileRanking}
+                        stars={profileStars}
+                        totalProblems={profileTotalProblems}
+                        problemSolved={profileCorrectProblemSolved} />
+                </div>
             </div>
         </div>
     );

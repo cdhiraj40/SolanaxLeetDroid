@@ -28,7 +28,9 @@
         "reflect-metadata": "^0.1.13",
         "type-graphql": "^1.1.1",
         "use-http": "1.0.26",
-        "web-vitals": "^2.1.4"
+        "web-vitals": "^2.1.4",
+        "moment": "^2.29.1",
+        "react-component-export-image": "^1.0.6"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.3",
