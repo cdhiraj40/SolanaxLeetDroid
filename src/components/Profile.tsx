@@ -5,8 +5,8 @@ import videos from "../assets/videos/welcome.mp4";
 import { AcSubmissionNum, AllQuestionsCount, RootObject, TotalSubmissionNum } from "../api/Interfaces/LeetCodeProfile"
 import PROFILE_QUERY from '../api/Queries/ProfileQuery'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import { ConnectionProvider, useAnchorWallet, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import {
     LedgerWalletAdapter,
     PhantomWalletAdapter,
@@ -16,13 +16,18 @@ import {
     SolletWalletAdapter,
     TorusWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
+import * as anchor from "@project-serum/anchor";
 
+import {
+    Program, Provider, web3, BN,
+} from '@project-serum/anchor';
 import { clusterApiUrl, Connection } from '@solana/web3.js';
 import React, { FC, ReactNode, useEffect, useMemo, useRef } from 'react';
 import { ProfileCard } from './ProfileCard';
 import totalSubmissionNum from '../api/Queries/TotalSubmissionNum'
 import allQuestionsCount from '../api/Queries/AllQuestionsCount'
 import acSubmissionNum from '../api/Queries/ACSubmissionNum'
+import idl from '../idl.json'
 require('../App.css');
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -82,6 +87,57 @@ const Content: FC = () => {
     const [click, setClick] = React.useState(false)
     const username = useRef(null)
     const div = useRef(null)
+
+    const wallet = useAnchorWallet();
+
+    function getProvider() {
+        if (!wallet) {
+            return null;
+        }
+
+        /* Create the provider and return it to the caller */
+        const connection = new Connection('https://api.devnet.solana.com', "processed")
+
+        const provider = new Provider(
+            connection, wallet, { "preflightCommitment": "processed" },
+        );
+        return provider
+    }
+
+    async function sendProfile() {
+        const baseAccount = web3.Keypair.generate()
+        const key = baseAccount.publicKey
+        const provider = getProvider()
+        if (!provider) {
+            throw ("Provider is null");
+        }
+
+        /* Create the program interface combining the idl, program IDL, and provider" */
+        const a = JSON.stringify(idl);
+        const b = JSON.parse(a);
+
+        const program = new Program(b, idl.metadata.address, provider);
+
+        const tsx = await program.rpc.sendProfile('cdhiraj40', 'Dhiraj', 'Hey this is Dhiraj', '1001', 10, 55.56, 2, {
+            accounts: {
+                // account share...
+                profile: baseAccount.publicKey,
+                author: program.provider.wallet.publicKey,
+                systemProgram: anchor.web3.SystemProgram.programId,
+            },
+            signers:
+                // Key pairs of signers here...
+                [baseAccount],
+        });
+        
+        // log the transaction ID
+        console.log("transaction ID:", tsx)
+
+        // After sending the transaction to the blockchain.
+        // Fetch the account details of the created LeetDroid account.
+        const leetdroidAccount = await program.account.leetCodeAccount.fetch(baseAccount.publicKey);
+        console.log("account:", leetdroidAccount);
+    }
 
     useEffect(() => {
         async function fetchProfile() {
@@ -178,6 +234,8 @@ const Content: FC = () => {
                         stars={profileStars}
                         totalProblems={profileTotalProblems}
                         problemSolved={profileCorrectProblemSolved} />
+                    <Button className='welcome-btns-btnsns' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={sendProfile}>Send Profile</Button>
+                    <WalletMultiButton />
                 </div>
             </div>
         </div>
