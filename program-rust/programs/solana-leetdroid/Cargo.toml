@@ -1,0 +1,21 @@
+[package]
+name = "solana-leetdroid"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "solana_leetdroid"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.22.1"
+serde = { version = "1.0.126", features = ["derive"] }
+serde_json = "1.0.64"
