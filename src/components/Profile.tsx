@@ -235,7 +235,6 @@ const Content: FC = () => {
         }
     }
 
-
     return (
         <div className="profile">
             <div ref={div} className='input-container'>
@@ -246,10 +245,10 @@ const Content: FC = () => {
                     </label>
                     <Button className='get-profile' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={setButtonClick}>Get Profile</Button>
                     <ProfileCard
-                        username={profileUsername}
+                        username={profileUsername.substring(0,50)}
                         picUrl={profilePictureUrl}
-                        name={profileName} bio={profileBio}
-                        ranking={profileRanking}
+                        name={profileName.substring(0,50)} bio={profileBio.substring(0,20)}
+                        ranking={profileRanking.substring(0,10)}
                         stars={profileStars}
                         totalProblems={profileTotalProblems}
                         problemSolved={profileCorrectProblemSolved} />
