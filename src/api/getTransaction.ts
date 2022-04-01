@@ -1,4 +1,4 @@
-import { DEVNET_API } from "../Const";
+import { DEVNET_API } from "../utils/Const";
 
 async function GetTransaction(transactionID) {
     var myHeaders = new Headers();

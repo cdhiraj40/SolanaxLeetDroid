@@ -3,7 +3,6 @@ require("../App.css");
 import "./Profile.css"
 import videos from "../assets/videos/welcome.mp4";
 import { AcSubmissionNum, AllQuestionsCount, RootObject, TotalSubmissionNum } from "../api/Interfaces/LeetCodeProfile"
-import PROFILE_QUERY from "../api/Queries/ProfileQuery"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { ConnectionProvider, useAnchorWallet, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
@@ -27,9 +26,10 @@ import { ProfileCard } from "./ProfileCard";
 import totalSubmissionNum from "../api/Queries/TotalSubmissionNum"
 import allQuestionsCount from "../api/Queries/AllQuestionsCount"
 import acSubmissionNum from "../api/Queries/ACSubmissionNum"
-import idl from "../idl.json"
-import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../Errors";
-import { DEVNET_API, LEETCODE_API } from "../Const";
+import idl from "../utils/idl.json"
+import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../utils/Errors";
+import { DEVNET_API, processed } from "../utils/Const";
+import fetchProfile from "../api/fetchProfile";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -107,10 +107,10 @@ const Content: FC = () => {
         }
 
         /* Create the provider and return it to the caller */
-        const connection = new Connection(DEVNET_API, "processed")
+        const connection = new Connection(DEVNET_API, processed)
 
         const provider = new Provider(
-            connection, wallet, { "preflightCommitment": "processed" },
+            connection, wallet, { "preflightCommitment": processed },
         );
         return provider
     }
@@ -154,30 +154,24 @@ const Content: FC = () => {
     }
 
     useEffect(() => {
-        async function fetchProfile() {
-            const data = await fetch(LEETCODE_API, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ query: PROFILE_QUERY, variables: { "username": username.current.value } })
-            }).then(async response => response.json())
+        fetchProfile(username.current.value)
+            .then(data => {
+                setData(data);
 
-            console.log(data)
-            setData(data);
-            setProfile(
-                data.data.matchedUser.username,
-                data.data.matchedUser.profile.realName,
-                data.data.matchedUser.profile.userAvatar,
-                data.data.matchedUser.profile.aboutMe,
-                data.data.matchedUser.profile.ranking,
-                data.data.matchedUser.profile.starRating,
-                data.data.allQuestionsCount,
-                data.data.matchedUser.submitStats.totalSubmissionNum,
-                data.data.matchedUser.submitStats.acSubmissionNum
-            )
+                setProfile(
+                    data.data.matchedUser.username,
+                    data.data.matchedUser.profile.realName,
+                    data.data.matchedUser.profile.userAvatar,
+                    data.data.matchedUser.profile.aboutMe,
+                    data.data.matchedUser.profile.ranking,
+                    data.data.matchedUser.profile.starRating,
+                    data.data.allQuestionsCount,
+                    data.data.matchedUser.submitStats.totalSubmissionNum,
+                    data.data.matchedUser.submitStats.acSubmissionNum
+                )
+            })
 
-        }
+            .catch(err => console.warn(err))
 
         async function setProfile(
             username: React.SetStateAction<string>,
@@ -221,7 +215,7 @@ const Content: FC = () => {
 
         if (click) {
             (async () => {
-                fetchProfile()
+                fetchProfile(username.current.value)
             })();
         }
         setClick(false)

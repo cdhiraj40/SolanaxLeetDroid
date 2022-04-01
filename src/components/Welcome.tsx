@@ -7,7 +7,7 @@ import siteLogo from "../assets/images/main_logo.png";
 import { ProfileCard } from './ProfileCard';
 import { LeetCodeProfile } from '../api/Interfaces/LeetCodeProfile';
 import { exportComponentAsJPEG } from 'react-component-export-image';
-import { transactionNotProvided } from '../Errors';
+import { transactionNotProvided } from '../utils/Errors';
 import LeetCodeProfileBlockchain from '../api/Queries/LeetCodeProfile';
 import GetTransaction from '../api/getTransaction';
 

@@ -1,0 +1,155 @@
+{
+  "version": "0.1.0",
+  "name": "solana_leetdroid",
+  "instructions": [
+    {
+      "name": "sendProfile",
+      "accounts": [
+        {
+          "name": "profile",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "picUrl",
+          "type": "string"
+        },
+        {
+          "name": "bio",
+          "type": "string"
+        },
+        {
+          "name": "ranking",
+          "type": "string"
+        },
+        {
+          "name": "problemSolved",
+          "type": "i32"
+        },
+        {
+          "name": "acceptanceRate",
+          "type": "f32"
+        },
+        {
+          "name": "stars",
+          "type": "i8"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "LeetCodeAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "picUrl",
+            "type": "string"
+          },
+          {
+            "name": "bio",
+            "type": "string"
+          },
+          {
+            "name": "ranking",
+            "type": "string"
+          },
+          {
+            "name": "problemSolved",
+            "type": "i32"
+          },
+          {
+            "name": "acceptanceRate",
+            "type": "f32"
+          },
+          {
+            "name": "stars",
+            "type": "i8"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UsernameTooLong",
+      "msg": "The provided username should be 50 characters long maximum."
+    },
+    {
+      "code": 6001,
+      "name": "NameTooLong",
+      "msg": "The provided name should be 50 characters long maximum."
+    },
+    {
+      "code": 6002,
+      "name": "BioTooLong",
+      "msg": "The provided bio should be 200 characters long maximum."
+    },
+    {
+      "code": 6003,
+      "name": "PicUrlTooLong",
+      "msg": "The provided pic URL should be 280 characters long maximum."
+    },
+    {
+      "code": 6004,
+      "name": "RankingTooLong",
+      "msg": "The provided ranking should be 10 characters long maximum."
+    },
+    {
+      "code": 6005,
+      "name": "ProblemSolvedTooLarge",
+      "msg": "The provided problem solved number should should be 4 integers long maximum."
+    },
+    {
+      "code": 6006,
+      "name": "AcceptanceRateTooGood",
+      "msg": "The provided acceptance rate should should be 100 percent maximum."
+    },
+    {
+      "code": 6007,
+      "name": "TooManyStars",
+      "msg": "The provided stars should should be 5 maximum."
+    }
+  ],
+  "metadata": {
+    "address": "E3s8VLFoVor6k7oXC6yrsCpgvJoky26zPceeF8eGBPtD"
+  }
+}
