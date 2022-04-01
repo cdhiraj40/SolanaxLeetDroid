@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 declare_id!("E3s8VLFoVor6k7oXC6yrsCpgvJoky26zPceeF8eGBPtD");
 
@@ -7,11 +7,12 @@ declare_id!("E3s8VLFoVor6k7oXC6yrsCpgvJoky26zPceeF8eGBPtD");
 pub mod solana_leetdroid {
     use super::*;
 
-    // problem solved -> easy, medium, hard --> just do string lel
+    // TODO problem solved -> all, easy, medium, hard --> just do string lel
     pub fn send_profile(
         ctx: Context<SendProfile>,
         username: String,
         name: String,
+        pic_url: String,
         bio: String,
         ranking: String,
         problem_solved: i32,
@@ -28,6 +29,9 @@ pub mod solana_leetdroid {
         if name.chars().count() > 50 {
             return Err(ErrorCode::NameTooLong.into());
         }
+        if pic_url.chars().count() > 280 {
+            return Err(ErrorCode::PicUrlTooLong.into());
+        }
         if bio.chars().count() > 200 {
             return Err(ErrorCode::BioTooLong.into());
         }
@@ -43,36 +47,31 @@ pub mod solana_leetdroid {
         if stars > 5 {
             return Err(ErrorCode::TooManyStars.into());
         }
-        
+
         let account = LeetcodeAccount {
-            timestamp:clock.unix_timestamp,
+            timestamp: clock.unix_timestamp,
             username: username.to_string(),
             name: name.to_string(),
+            pic_url: pic_url.to_string(),
             bio: bio.to_string(),
             ranking: ranking.to_string(),
-            problem_solved:problem_solved,
-            acceptance_rate:acceptance_rate,
-            stars
+            problem_solved,
+            acceptance_rate,
+            stars,
         };
         let serialized_account = serde_json::to_string(&account).unwrap();
 
-        msg!("{}",serialized_account);
+        msg!("{}", serialized_account);
         profile.owner = *author.key;
         profile.timestamp = clock.unix_timestamp;
         profile.username = username;
         profile.name = name;
+        profile.pic_url = pic_url;
         profile.bio = bio;
         profile.ranking = ranking;
         profile.problem_solved = problem_solved;
         profile.acceptance_rate = acceptance_rate;
         profile.stars = stars;
-
-        Ok(())
-    }
-
-    pub fn initialize(ctx: Context<Initialize>, bio: String) -> Result<()> {
-        let profile: &mut Account<LeetCodeAccount> = &mut ctx.accounts.profile;
-        profile.bio = bio;
 
         Ok(())
     }
@@ -84,16 +83,17 @@ struct LeetcodeAccount {
     pub timestamp: i64,
     pub username: String,
     pub name: String,
+    pub pic_url: String,
     pub bio: String,
     pub ranking: String,
     pub problem_solved: i32,
     pub acceptance_rate: f32,
     // max 100.00
-    pub stars: i8
+    pub stars: i8,
 }
 
 #[derive(Accounts)]
-pub struct Initialize<'info>{
+pub struct Initialize<'info> {
     #[account(init, payer = author, space = 8+1000)]
     pub profile: Account<'info, LeetCodeAccount>,
     #[account(mut)] // we are going to mutate the amount of money in their account.
@@ -116,6 +116,7 @@ pub struct LeetCodeAccount {
     pub timestamp: i64,
     pub username: String,
     pub name: String,
+    pub pic_url: String,
     pub bio: String,
     pub ranking: String,
     pub problem_solved: i32,
@@ -133,6 +134,8 @@ const STRING_LENGTH_PREFIX: usize = 4;
 const NAME_LENGTH: usize = 50 * 4;
 // 50 chars max
 const USERNAME_LENGTH: usize = 50 * 4;
+// ~280 chars max --estimated max value
+const PIC_URL_LENGTH: usize = 280 * 4;
 // 200 chars max
 const BIO_LENGTH: usize = 200 * 4;
 // 10 chars max
@@ -153,6 +156,8 @@ impl LeetCodeAccount {
         + STRING_LENGTH_PREFIX
         + NAME_LENGTH
         + STRING_LENGTH_PREFIX
+        + PIC_URL_LENGTH
+        + STRING_LENGTH_PREFIX
         + BIO_LENGTH
         + STRING_LENGTH_PREFIX
         + RANKING_LENGTH
@@ -169,6 +174,8 @@ pub enum ErrorCode {
     NameTooLong,
     #[msg("The provided bio should be 200 characters long maximum.")]
     BioTooLong,
+    #[msg("The provided pic URL should be 280 characters long maximum.")]
+    PicUrlTooLong,
     #[msg("The provided ranking should be 10 characters long maximum.")]
     RankingTooLong,
     #[msg("The provided problem solved number should should be 4 integers long maximum.")]

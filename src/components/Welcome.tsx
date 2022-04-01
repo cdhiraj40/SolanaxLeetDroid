@@ -49,7 +49,7 @@ const Welcome: FC = () => {
 
     function downloadProfile(element) {
         element.preventDefault();
-        exportComponentAsJPEG(certificateWrapper, {
+        exportComponentAsJPEG(certificateWrapper as React.RefObject<HTMLDivElement>, {
             html2CanvasOptions: { backgroundColor: null },
             fileName: "myLeetCodeProfile.jpg"
         });
@@ -62,7 +62,7 @@ const Welcome: FC = () => {
                 <video src={videos} autoPlay loop muted />
                 <img src={siteLogo}></img>
                 <div className="welcome-btns">
-                    <Button className="welcome-btns" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={getStarted}>Get Started</Button>
+                    <Button id="get-started" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={getStarted} to="/" type="light" >Get Started</Button>
                 </div>
             </div>
             <div ref={div} className="input-container">
@@ -71,21 +71,21 @@ const Welcome: FC = () => {
                 </label>
 
                 <div className="submit-btns">
-                    <Button buttonStyle='btn--outline' buttonSize='btn--medium' onClick={checkIfTransactionID}>
+                    <Button id="get-transaction" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={checkIfTransactionID} type="light" to="/">
                         Get Transaction</Button>
                 </div>
                 <div className="submit-btns">
-                    <Button buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile'>Get your own profile card</Button>
+                    <Button id="get-your-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" onClick = {undefined} to='/Upload-Profile'>Get your own profile card</Button>
                 </div>
 
                 <div className="cert-container">
-                    <div id="downloadWrapper-exp" ref={certificateWrapper}>
+                    <div id="downloadWrapper-exp" ref={certificateWrapper as React.RefObject<HTMLDivElement>} >
                         <div id="certificateWrapper-exp">
                             <p id="QR"><img id="QR-img" src={`${QRurl}`} alt="" /> </p>
                             <ProfileCard
                                 QRurl={QRurl}
                                 username={profile.username}
-                                picUrl={"https://media.istockphoto.com/photos/productivity-powered-by-digital-technology-picture-id1330965067?s=612x612"}
+                                picUrl={profile.pic_url}
                                 name={profile.name} bio={profile.bio}
                                 ranking={profile.ranking}
                                 stars={profile.stars}
@@ -94,7 +94,7 @@ const Welcome: FC = () => {
                         </div>
                     </div>
                 </div>
-                <Button buttonStyle='btn--outline' buttonSize='btn--medium' onClick={(element) => {
+                <Button id="download-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" to="/" onClick={(element: any) => {
                     downloadProfile(element)
                 }}>Download</Button>
             </div>

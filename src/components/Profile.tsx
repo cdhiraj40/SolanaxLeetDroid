@@ -1,12 +1,12 @@
-import { Button } from './Button';
-require('../App.css');
-import './Profile.css'
+import { Button } from "./Button";
+require("../App.css");
+import "./Profile.css"
 import videos from "../assets/videos/welcome.mp4";
 import { AcSubmissionNum, AllQuestionsCount, RootObject, TotalSubmissionNum } from "../api/Interfaces/LeetCodeProfile"
-import PROFILE_QUERY from '../api/Queries/ProfileQuery'
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, useAnchorWallet, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import PROFILE_QUERY from "../api/Queries/ProfileQuery"
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { ConnectionProvider, useAnchorWallet, WalletProvider } from "@solana/wallet-adapter-react";
+import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import {
     LedgerWalletAdapter,
     PhantomWalletAdapter,
@@ -15,23 +15,23 @@ import {
     SolletExtensionWalletAdapter,
     SolletWalletAdapter,
     TorusWalletAdapter,
-} from '@solana/wallet-adapter-wallets';
+} from "@solana/wallet-adapter-wallets";
 import * as anchor from "@project-serum/anchor";
 
 import {
     Program, Provider, web3, BN,
-} from '@project-serum/anchor';
-import { clusterApiUrl, Connection } from '@solana/web3.js';
-import React, { FC, ReactNode, useEffect, useMemo, useRef } from 'react';
-import { ProfileCard } from './ProfileCard';
-import totalSubmissionNum from '../api/Queries/TotalSubmissionNum'
-import allQuestionsCount from '../api/Queries/AllQuestionsCount'
-import acSubmissionNum from '../api/Queries/ACSubmissionNum'
-import idl from '../idl.json'
-import { profileNotFetched, usernameNotProvided, walletNotProvided } from '../Errors';
-import { DEVNET_API, LEETCODE_API } from '../Const';
-require('../App.css');
-require('@solana/wallet-adapter-react-ui/styles.css');
+} from "@project-serum/anchor";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
+import React, { FC, ReactNode, useEffect, useMemo, useRef } from "react";
+import { ProfileCard } from "./ProfileCard";
+import totalSubmissionNum from "../api/Queries/TotalSubmissionNum"
+import allQuestionsCount from "../api/Queries/AllQuestionsCount"
+import acSubmissionNum from "../api/Queries/ACSubmissionNum"
+import idl from "../idl.json"
+import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../Errors";
+import { DEVNET_API, LEETCODE_API } from "../Const";
+require("../App.css");
+require("@solana/wallet-adapter-react-ui/styles.css");
 
 
 const Profile: FC = () => {
@@ -44,7 +44,7 @@ const Profile: FC = () => {
 export default Profile;
 
 const Context: FC<{ children: ReactNode }> = ({ children }) => {
-    // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+    // The network can be set to "devnet", "testnet", or "mainnet-beta".
     const network = WalletAdapterNetwork.Devnet;
 
     // You can also provide a custom RPC endpoint.
@@ -77,15 +77,15 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 
 const Content: FC = () => {
 
-    const [profileUsername, setProfileUsername] = React.useState('')
-    const [profileName, setProfileName] = React.useState('')
-    const [profileBio, setProfileBio] = React.useState('')
-    const [profileRanking, setProfileRanking] = React.useState('')
+    const [profileUsername, setProfileUsername] = React.useState("")
+    const [profileName, setProfileName] = React.useState("")
+    const [profileBio, setProfileBio] = React.useState("")
+    const [profileRanking, setProfileRanking] = React.useState("")
     const [profileStars, setProfileStars] = React.useState(0)
     const [profileTotalProblems, setProfileTotalProblems] = React.useState<AllQuestionsCount[]>(allQuestionsCount)
     const [profileProblemSolved, setProfileProblemSolved] = React.useState<TotalSubmissionNum[]>(totalSubmissionNum)
     const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<AcSubmissionNum[]>(acSubmissionNum)
-    const [profilePictureUrl, setProfilePictureUrl] = React.useState('')
+    const [profilePictureUrl, setProfilePictureUrl] = React.useState("")
     const [data, setData] = React.useState<RootObject>(null)
     const [click, setClick] = React.useState(false)
     const username = useRef(null)
@@ -132,7 +132,7 @@ const Content: FC = () => {
 
         const program = new Program(idlJSON, idl.metadata.address, provider);
 
-        const tsx = await program.rpc.sendProfile(profileUsername, profileName, profileBio, profileRanking, profileCorrectProblemSolved[0].count, 0.0, profileStars, {
+        const tsx = await program.rpc.sendProfile(profileUsername, profileName, profilePictureUrl, profileBio, profileRanking, profileCorrectProblemSolved[0].count, 0.0, profileStars, {
             accounts: {
                 // account share...
                 profile: baseAccount.publicKey,
@@ -165,9 +165,10 @@ const Content: FC = () => {
 
             console.log(data)
             setData(data);
-            setProfile(data.data.matchedUser.profile.userAvatar,
+            setProfile(
                 data.data.matchedUser.username,
                 data.data.matchedUser.profile.realName,
+                data.data.matchedUser.profile.userAvatar,
                 data.data.matchedUser.profile.aboutMe,
                 data.data.matchedUser.profile.ranking,
                 data.data.matchedUser.profile.starRating,
@@ -179,24 +180,24 @@ const Content: FC = () => {
         }
 
         async function setProfile(
-            profileUrl,
-            username,
-            name,
-            aboutMe,
-            ranking,
-            rating,
-            allQuestionsCount,
-            totalSubmissionNum,
-            acSubmissionNum
+            username: React.SetStateAction<string>,
+            name: React.SetStateAction<string>,
+            profilePicUrl: React.SetStateAction<string>,
+            aboutMe: React.SetStateAction<string>,
+            ranking: { toString: () => React.SetStateAction<string>; },
+            rating: React.SetStateAction<number>,
+            allQuestionsCount: React.SetStateAction<AllQuestionsCount[]>,
+            totalSubmissionNum: React.SetStateAction<TotalSubmissionNum[]>,
+            acSubmissionNum: React.SetStateAction<AcSubmissionNum[]>
         ) {
-            if (profileUrl) {
-                setProfilePictureUrl(profileUrl)
-            }
             if (username) {
                 setProfileUsername(username)
             }
             if (name) {
                 setProfileName(name)
+            }
+            if (profilePicUrl) {
+                setProfilePictureUrl(profilePicUrl)
             }
             if (aboutMe) {
                 setProfileBio(aboutMe)
@@ -237,22 +238,22 @@ const Content: FC = () => {
 
     return (
         <div className="profile">
-            <div ref={div} className='input-container'>
+            <div ref={div} className="input-container">
                 <video src={videos} autoPlay loop muted />
                 <div ref={div} className="input-container">
                     <label>Enter your leetcode username:
                         <input type="text" ref={username} />
                     </label>
-                    <Button className='get-profile' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={setButtonClick}>Get Profile</Button>
+                    <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={setButtonClick}>Get Profile</Button>
                     <ProfileCard
-                        username={profileUsername.substring(0,50)}
+                        username={profileUsername.substring(0, 50)}
                         picUrl={profilePictureUrl}
-                        name={profileName.substring(0,50)} bio={profileBio.substring(0,20)}
-                        ranking={profileRanking.substring(0,10)}
+                        name={profileName.substring(0, 50)} bio={profileBio.substring(0, 20)}
+                        ranking={profileRanking.substring(0, 10)}
                         stars={profileStars}
                         totalProblems={profileTotalProblems}
                         problemSolved={profileCorrectProblemSolved} />
-                    <Button className='welcome-btns-btnsns' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={checkIfProfileFetched}>Send Profile</Button>
+                    <Button id="welcome-btns-btnsns" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={checkIfProfileFetched}>Send Profile</Button>
                     <WalletMultiButton />
                 </div>
             </div>
