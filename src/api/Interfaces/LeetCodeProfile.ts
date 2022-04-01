@@ -57,3 +57,14 @@ export interface Data {
 export interface RootObject {
     data: Data;
 }
+
+export interface LeetCodeProfile {
+    username: string;
+    name: string;
+    bio: string;
+    ranking: string;
+    stars: number;
+    problemSolved: number;
+    acceptanceRate: number;
+    timeStamp: number;
+}

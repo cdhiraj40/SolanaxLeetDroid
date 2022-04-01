@@ -1,4 +1,4 @@
-export const allQuestionsCount = [
+const allQuestionsCount = [
   {
     "difficulty": "All",
     "count": 0

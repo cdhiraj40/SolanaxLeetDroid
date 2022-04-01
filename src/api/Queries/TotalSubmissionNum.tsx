@@ -1,4 +1,4 @@
-export const totalSubmissionNum = [
+const totalSubmissionNum = [
   {
     "difficulty": "All",
     "count": 0,

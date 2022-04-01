@@ -1,4 +1,4 @@
-export const PROFILE_QUERY = `
+const PROFILE_QUERY = `
     query getUserProfile($username: String!) {
         allQuestionsCount {
           difficulty

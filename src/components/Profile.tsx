@@ -28,8 +28,11 @@ import totalSubmissionNum from '../api/Queries/TotalSubmissionNum'
 import allQuestionsCount from '../api/Queries/AllQuestionsCount'
 import acSubmissionNum from '../api/Queries/ACSubmissionNum'
 import idl from '../idl.json'
+import { profileNotFetched, usernameNotProvided, walletNotProvided } from '../Errors';
+import { DEVNET_API, LEETCODE_API } from '../Const';
 require('../App.css');
 require('@solana/wallet-adapter-react-ui/styles.css');
+
 
 const Profile: FC = () => {
     return (
@@ -78,7 +81,7 @@ const Content: FC = () => {
     const [profileName, setProfileName] = React.useState('')
     const [profileBio, setProfileBio] = React.useState('')
     const [profileRanking, setProfileRanking] = React.useState('')
-    const [profileStars, setProfileStars] = React.useState(0.0)
+    const [profileStars, setProfileStars] = React.useState(0)
     const [profileTotalProblems, setProfileTotalProblems] = React.useState<AllQuestionsCount[]>(allQuestionsCount)
     const [profileProblemSolved, setProfileProblemSolved] = React.useState<TotalSubmissionNum[]>(totalSubmissionNum)
     const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<AcSubmissionNum[]>(acSubmissionNum)
@@ -88,6 +91,14 @@ const Content: FC = () => {
     const username = useRef(null)
     const div = useRef(null)
 
+    function checkIfProfileFetched() {
+        if (profileUsername) {
+            sendProfile()
+        } else {
+            profileNotFetched()
+        }
+    }
+
     const wallet = useAnchorWallet();
 
     function getProvider() {
@@ -96,7 +107,7 @@ const Content: FC = () => {
         }
 
         /* Create the provider and return it to the caller */
-        const connection = new Connection('https://api.devnet.solana.com', "processed")
+        const connection = new Connection(DEVNET_API, "processed")
 
         const provider = new Provider(
             connection, wallet, { "preflightCommitment": "processed" },
@@ -108,17 +119,20 @@ const Content: FC = () => {
         const baseAccount = web3.Keypair.generate()
         const key = baseAccount.publicKey
         const provider = getProvider()
+
         if (!provider) {
-            throw ("Provider is null");
+            walletNotProvided()
+            console.error("Provider is null")
+            return
         }
 
         /* Create the program interface combining the idl, program IDL, and provider" */
-        const a = JSON.stringify(idl);
-        const b = JSON.parse(a);
+        const jsonString = JSON.stringify(idl);
+        const idlJSON = JSON.parse(jsonString);
 
-        const program = new Program(b, idl.metadata.address, provider);
+        const program = new Program(idlJSON, idl.metadata.address, provider);
 
-        const tsx = await program.rpc.sendProfile('cdhiraj40', 'Dhiraj', 'Hey this is Dhiraj', '1001', 10, 55.56, 2, {
+        const tsx = await program.rpc.sendProfile(profileUsername, profileName, profileBio, profileRanking, profileCorrectProblemSolved[0].count, 0.0, profileStars, {
             accounts: {
                 // account share...
                 profile: baseAccount.publicKey,
@@ -129,7 +143,7 @@ const Content: FC = () => {
                 // Key pairs of signers here...
                 [baseAccount],
         });
-        
+
         // log the transaction ID
         console.log("transaction ID:", tsx)
 
@@ -141,7 +155,7 @@ const Content: FC = () => {
 
     useEffect(() => {
         async function fetchProfile() {
-            const data = await fetch('https://damp-garden-91778.herokuapp.com/https://leetcode.com/graphql/', {
+            const data = await fetch(LEETCODE_API, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -149,6 +163,7 @@ const Content: FC = () => {
                 body: JSON.stringify({ query: PROFILE_QUERY, variables: { "username": username.current.value } })
             }).then(async response => response.json())
 
+            console.log(data)
             setData(data);
             setProfile(data.data.matchedUser.profile.userAvatar,
                 data.data.matchedUser.username,
@@ -213,7 +228,11 @@ const Content: FC = () => {
 
 
     function setButtonClick(val: any) {
-        setClick(true)
+        if (username.current.value) {
+            setClick(true)
+        } else {
+            usernameNotProvided()
+        }
     }
 
 
@@ -228,13 +247,13 @@ const Content: FC = () => {
                     <Button className='get-profile' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={setButtonClick}>Get Profile</Button>
                     <ProfileCard
                         username={profileUsername}
-                        profilePicUrl={profilePictureUrl}
+                        picUrl={profilePictureUrl}
                         name={profileName} bio={profileBio}
                         ranking={profileRanking}
                         stars={profileStars}
                         totalProblems={profileTotalProblems}
                         problemSolved={profileCorrectProblemSolved} />
-                    <Button className='welcome-btns-btnsns' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={sendProfile}>Send Profile</Button>
+                    <Button className='welcome-btns-btnsns' buttonStyle='btn--outline' buttonSize='btn--medium' to='/Upload-Profile' onClick={checkIfProfileFetched}>Send Profile</Button>
                     <WalletMultiButton />
                 </div>
             </div>

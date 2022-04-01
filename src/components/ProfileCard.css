@@ -105,6 +105,10 @@ body,
   font-size: .75rem;
 }
 
+.QR {
+  visibility:hidden;
+}
+
 .links button {
   font-family: 'Poppins', sans-serif;
   min-width: 120px;

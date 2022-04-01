@@ -1,4 +1,4 @@
-export const acSubmissionNum = [
+const acSubmissionNum = [
   {
     "difficulty": "All",
     "count": 0,
