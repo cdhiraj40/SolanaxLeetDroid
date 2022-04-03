@@ -2,10 +2,6 @@
     "private": true,
     "name": "solana-leetdroid",
     "version": "0.1.0",
-    "engines": {
-        "node": "17.3.0",
-        "npm": "8.5.0"
-      },
     "dependencies": {
         "@project-serum/anchor": "^0.23.0",
         "@solana/wallet-adapter-base": "^0.9.5",
