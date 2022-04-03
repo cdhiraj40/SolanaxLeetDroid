@@ -3,7 +3,7 @@
     "name": "solana-leetdroid",
     "version": "0.1.0",
     "engines": {
-        "node": "v17.3.0",
+        "node": "17.3.0",
         "npm": "8.5.0"
       },
     "dependencies": {
