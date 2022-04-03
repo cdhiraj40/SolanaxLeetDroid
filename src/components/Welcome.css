@@ -13,7 +13,6 @@ video {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2); */
     object-fit: contain;
     margin-bottom: 10%;
 }
@@ -25,7 +24,6 @@ video {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2); */
     object-fit: contain;
     margin-top: 20px;
 }
@@ -45,10 +43,6 @@ video {
 
 .submit-btns {
     margin-top: 5px;
-}
-
-.download-btn {
-    margin-top: 2%;
 }
 
 .submit-btns .btn {

@@ -63,7 +63,7 @@ function Navbar() {
                         </li>
                     </ul>
                     {/* Navbar Mobile Buttons */}
-                    {button && <Button buttonStyle="btn--outline" to='/about' >About</Button>}
+                    {button && <Button buttonStyle="btn--outline" to='/how-to-use' >How to use</Button>}
                 </div>
             </nav>
         </>

@@ -54,12 +54,14 @@
         "typescript": "^4.6.3"
     },
     "scripts": {
-        "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
-        "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-        "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test",
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
         "eject": "react-scripts eject",
+        "predeploy": "npm run build",
+        "build:program-rust": "cargo build-bpf --manifest-path=./program-rust/Cargo.toml"
         "postinstall": "patch-package"
-    },
+      },       
     "eslintConfig": {
         "extends": [
             "react-app",

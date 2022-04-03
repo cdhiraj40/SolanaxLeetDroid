@@ -263,12 +263,12 @@ const Content: FC = () => {
                 </div>
                 <div className="wallet-btns">
                     <WalletMultiButton className="wallet" ></WalletMultiButton>
-                    <Button id="solana-explorer" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={openSolanaExplorer}>Verify Transaction</Button>
+                    <Button id="solana-explorer" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/upload-profile" onClick={openSolanaExplorer}>Verify Transaction</Button>
                 </div>
                 <label>Enter your leetcode username:
                     <input type="text" ref={username} />
                 </label>
-                <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={setButtonClick}>Get Profile</Button>
+                <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/upload-profile" onClick={setButtonClick}>Get Profile</Button>
                 <div className="cert-container">
                     <div id="certificateWrapper-exp">
                         <ProfileCard
@@ -283,7 +283,7 @@ const Content: FC = () => {
                         />
                     </div>
                 </div>
-                <Button id="send-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={checkIfProfileFetched}>Send Profile</Button>
+                <Button id="send-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/upload-profile" onClick={checkIfProfileFetched}>Send Profile</Button>
             </div>
         </div>
     );

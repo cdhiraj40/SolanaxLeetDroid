@@ -81,7 +81,7 @@ const Welcome: FC = () => {
                         Get Transaction</Button>
                 </div>
                 <div className="submit-btns">
-                    <Button id="get-your-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" onClick={undefined} to='/Upload-Profile'>Get your own profile card</Button>
+                    <Button id="get-your-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" onClick={undefined} to='/upload-profile'>Get your own profile card</Button>
                 </div>
 
                 <div className="cert-container">
