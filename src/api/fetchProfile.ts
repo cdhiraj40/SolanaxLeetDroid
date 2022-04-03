@@ -8,10 +8,11 @@ async function fetchProfile(username: string) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ query: PROFILE_QUERY, variables: { "username": username } })
-    }).then(async response => response.json());
+    }).then(async response => await response.json());
 
+    
     // log the response
-    console.log(data);
+    console.log("fetched profile from username",data);
     return data;
 }
 

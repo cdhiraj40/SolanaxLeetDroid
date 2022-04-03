@@ -18,3 +18,7 @@ export const usernameNotProvided = () => {
 export const transactionNotProvided = () => {
     toast('Please enter the transaction ID first')
 }
+
+export const generalError = () => {
+    toast('oops, something went wrong. Please try again.')
+}

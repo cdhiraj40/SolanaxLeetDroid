@@ -4,17 +4,47 @@ video {
     height: 100%;
     position: fixed;
     z-index: -1;
+    display: inline-block;
 }
 
-.profile-container {
-    height: 100vh;
-    width: 100%;
+.cert-container {
+    margin-bottom: 3%;
+}
+.wallet-btns {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
-    object-fit: contain;
+    margin-bottom: 10%;
+    width: fit-content;
+}
+
+.wallet-btns .btn {
+    margin: 6px;
+}
+
+.wallet-btns #solana-explorer {
+    visibility:hidden;
+    display: none;
+}
+.wallet-adapter-button.wallet {
+    background-color: transparent;
+    font-size: 16px;
+    margin-top: 1%;
+    width: fit-content;
+    color: #FFF;
+    border: 2px solid rgb(216, 2, 134);
+    border-radius: 0;
+    font-family: "Lucida Console", Monaco, monospace;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 0 #9945FF;
+    background-color: linear-gradient(to right, #DC1FFF 0%, #03E1FF 51%, #14F195 33%);
+    -webkit-transition: ease-out 0.8s;
+    -moz-transition: ease-out 0.8s;
+    transition: ease-out 0.8s;
+    font-weight: normal;
+}
+
+.wallet-adapter-button.wallet:hover {
+    box-shadow: inset 400px 50px 0 0 #03E1FF;
 }
 
 .input-container {
@@ -24,21 +54,34 @@ video {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 0;
     box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
     object-fit: contain;
 }
 
-.profile-container>h1 {
-    color: #fff;
-    font-size: 100px;
-    margin-top: -100px;
+.input-container .uploaded-text {
+    color: white;
+    font-family: "Lucida Console", Monaco, monospace;
+    text-align: center;
+    margin-top: 20%;
 }
 
-.profile-container>p {
-    margin-top: 8px;
-    color: #fff;
-    font-size: 32px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+ .uploaded-text #heading {
+    font-size: xx-large;
+}
+
+ .uploaded-text #text {
+    font-size: x-large;
+    visibility: hidden;
+    display: none;
+}
+
+.input-container #send-profile {
+    margin-bottom: 10%;
+}
+
+.site-logo {
+    visibility: hidden;
 }
 
 .get-profile {
@@ -49,18 +92,19 @@ video {
     margin: 6px;
 }
 
-label{
+label {
     color: white;
     font-family: "Lucida Console", Monaco, monospace;
-    text-align: center; 
+    text-align: center;
 }
-input[type=text]{
-    width:100%;
-    border-radius:4px;
-    margin:8px 0;
-    outline:none;
-    box-sizing:border-box;
-    transition:.3s;
+
+input[type=text] {
+    width: 100%;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    box-sizing: border-box;
+    transition: .3s;
     align-items: center;
     font-family: "Lucida Console", Monaco, monospace;
     transition: all 0.75s ease-in-out 0s;
@@ -69,53 +113,46 @@ input[type=text]{
     padding: 18px 36px;
     padding: 8px 20px;
     color: white;
-    text-align: center; 
+    text-align: center;
     background: transparent;
     border: 1px solid rgb(216, 2, 134);
     box-shadow: inset 0 0 0 0 #D80286;
-  }
-  
-  input:focus{
-      outline: none;
-      border-bottom: 2px solid #14F195;
-      border-left: 2px solid #9945FF;
-      border-right: 2px solid #03E1FF;
-      border-top: 2px solid #DC1FFF;
-      transform-origin: 0 100% 0;
-    }
+}
 
+input:focus {
+    outline: none;
+    border-bottom: 2px solid #14F195;
+    border-left: 2px solid #9945FF;
+    border-right: 2px solid #03E1FF;
+    border-top: 2px solid #DC1FFF;
+    transform-origin: 0 100% 0;
+}
 
 @media screen and (max-width: 960px) {
     .welcome-container>h1 {
         font-size: 70px;
         margin-top: -150px;
     }
-
     .welcome-img {
         margin-bottom: 150px;
     }
 }
-
 
 @media screen and (max-width: 768px) {
     .welcome-container>h1 {
         font-size: 50px;
         margin-top: -100px;
     }
-
     .welcome-container>p {
         margin-top: 30px;
     }
-
     .btn-mobile {
         display: block;
         text-decoration: none;
     }
-
     .btn {
         width: 100%;
     }
-
     .welcome-img {
         margin-bottom: 100px;
     }

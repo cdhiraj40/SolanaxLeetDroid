@@ -1,19 +1,15 @@
 const allQuestionsCount = [
   {
     "difficulty": "All",
-    "count": 0
+    "count": 2227
   },
   {
     "difficulty": "Easy",
-    "count": 0
+    "count": 558
   },
   {
     "difficulty": "Medium",
-    "count": 0
-  },
-  {
-    "difficulty": "Hard",
-    "count": 0
+    "count": 1188
   }
 ]
 

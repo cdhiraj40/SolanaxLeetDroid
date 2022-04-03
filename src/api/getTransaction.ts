@@ -1,6 +1,10 @@
 import { DEVNET_API } from "../utils/Const";
+import { generalError } from "../utils/Errors";
+
+
 
 async function GetTransaction(transactionID) {
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -20,32 +24,36 @@ async function GetTransaction(transactionID) {
         body: raw,
         redirect: 'follow'
     };
-
     // fetch the transaction
-    return fetch(DEVNET_API, requestOptions as RequestInit)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            var main = data.result.meta.logMessages[4];
-
-            // remove unnessasary text and trimmed important data to JSON
-            var mainJSON = JSON.parse(main.substring(main.indexOf("{"), main.indexOf("}") + 1));
-
-
-            // get date from timestamp
-            // eg. 2022-03-31T09:36:29.000Z
-            var date = new Date(mainJSON.timestamp * 1000);
-
-            // convert the above date into human readable eg. 3/31/2022
-            mainJSON.timestamp = date.toLocaleDateString("en-US");
-
-            // log the fetched json
-            console.log(mainJSON)
-
-            return mainJSON;
-        })
+    const data = await fetch(DEVNET_API, requestOptions as RequestInit)
+        .then(async response => await response.json())
         .catch(error => console.log('error', error));
 
+    try {
+        console.log("Fetched raw transaction from transaction ID", data)
+
+        var main = data.result.meta.logMessages[4];
+
+        // remove unnessasary text and trimmed important data to JSON
+        var temp = main.substring(main.indexOf("{"), main.indexOf("+") + 10).replace("+", "");
+        console.log(temp);
+        var mainJSON = JSON.parse(temp);
+
+        // get date from timestamp
+        // eg. 2022-03-31T09:36:29.000Z
+        var date = new Date(mainJSON.timestamp * 1000);
+
+        // convert the above date into human readable eg. 3/31/2022
+        mainJSON.timestamp = date.toLocaleDateString("en-US").toString();
+
+        // log the fetched json
+        console.log("Fetched JSON from transaction ID", mainJSON)
+
+        return mainJSON;
+    } catch(e) {
+        generalError()
+        return;
+    }
 }
 
 export default GetTransaction;

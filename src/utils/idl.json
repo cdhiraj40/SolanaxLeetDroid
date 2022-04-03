@@ -53,6 +53,14 @@
         {
           "name": "stars",
           "type": "i8"
+        },
+        {
+          "name": "allQuestionCount",
+          "type": "string"
+        },
+        {
+          "name": "acSubmissinNum",
+          "type": "string"
         }
       ]
     }
@@ -102,6 +110,14 @@
           {
             "name": "stars",
             "type": "i8"
+          },
+          {
+            "name": "allQuestionCount",
+            "type": "string"
+          },
+          {
+            "name": "acSubmissinNum",
+            "type": "string"
           }
         ]
       }

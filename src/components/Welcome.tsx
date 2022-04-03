@@ -4,12 +4,12 @@ import React, { FC, useRef, useState } from 'react';
 require('../App.css');
 import videos from "../assets/videos/welcome.mp4";
 import siteLogo from "../assets/images/main_logo.png";
-import { ProfileCard } from './ProfileCard';
 import { LeetCodeProfile } from '../api/Interfaces/LeetCodeProfile';
 import { exportComponentAsJPEG } from 'react-component-export-image';
 import { transactionNotProvided } from '../utils/Errors';
 import LeetCodeProfileBlockchain from '../api/Queries/LeetCodeProfile';
 import GetTransaction from '../api/getTransaction';
+import ProfileCard from './ProfileCard';
 
 const Welcome: FC = () => {
 
@@ -23,7 +23,15 @@ const Welcome: FC = () => {
 
     function getStarted() {
         if (div && div.current) {
-            div.current.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+            div.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }
+
+    function _scrollTo(yOffset = 0) {
+        if (div && div.current) {
+            const y = div.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            div.current.scrollIntoView({ top: y, behavior: "smooth", block: "center" });
         }
     }
 
@@ -36,13 +44,11 @@ const Welcome: FC = () => {
     }
 
     function getTransaction() {
-
         GetTransaction(transactionID)
             .then(profile => {
-                console.log(profile)
                 setProfile(profile)
             })
-            .catch(err => console.warn(err))
+            .catch(err => console.warn("error while fetching transaction", err))
 
         setQRurl(transactionID);
     }
@@ -62,7 +68,7 @@ const Welcome: FC = () => {
                 <video src={videos} autoPlay loop muted />
                 <img src={siteLogo}></img>
                 <div className="welcome-btns">
-                    <Button id="get-started" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={getStarted} to="/" type="light" >Get Started</Button>
+                    <Button id="get-started" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={_scrollTo} to="/" type="light" >Get Started</Button>
                 </div>
             </div>
             <div ref={div} className="input-container">
@@ -75,28 +81,30 @@ const Welcome: FC = () => {
                         Get Transaction</Button>
                 </div>
                 <div className="submit-btns">
-                    <Button id="get-your-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" onClick = {undefined} to='/Upload-Profile'>Get your own profile card</Button>
+                    <Button id="get-your-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" onClick={undefined} to='/Upload-Profile'>Get your own profile card</Button>
                 </div>
 
                 <div className="cert-container">
                     <div id="downloadWrapper-exp" ref={certificateWrapper as React.RefObject<HTMLDivElement>} >
                         <div id="certificateWrapper-exp">
-                            <p id="QR"><img id="QR-img" src={`${QRurl}`} alt="" /> </p>
                             <ProfileCard
                                 QRurl={QRurl}
                                 username={profile.username}
                                 picUrl={profile.pic_url}
-                                name={profile.name} bio={profile.bio}
-                                ranking={profile.ranking}
-                                stars={profile.stars}
-                                totalProblems={[0, 1, 2, 3]}
-                                problemSolved={[0, 1, 2, 3]} />
+                                name={profile.name}
+                                bio={profile.bio}
+                                timeStamp={profile.timestamp}
+                                problemSolved={(profile.ac_submissin_num == "") ? "" : JSON.parse(profile.ac_submissin_num)}
+                                totalProblems={(profile.all_question_count == "") ? "" : JSON.parse(profile.all_question_count)}
+                            />
                         </div>
                     </div>
                 </div>
-                <Button id="download-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" to="/" onClick={(element: any) => {
-                    downloadProfile(element)
-                }}>Download</Button>
+                <div className="download-btn">
+                    <Button id="download-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" to="/" onClick={(element: any) => {
+                        downloadProfile(element)
+                    }}>Download</Button>
+                </div>
             </div>
         </div>
     );

@@ -7,7 +7,6 @@ declare_id!("E3s8VLFoVor6k7oXC6yrsCpgvJoky26zPceeF8eGBPtD");
 pub mod solana_leetdroid {
     use super::*;
 
-    // TODO problem solved -> all, easy, medium, hard --> just do string lel
     pub fn send_profile(
         ctx: Context<SendProfile>,
         username: String,
@@ -18,6 +17,8 @@ pub mod solana_leetdroid {
         problem_solved: i32,
         acceptance_rate: f32,
         stars: i8,
+        all_question_count: String,
+        ac_submissin_num: String,
     ) -> Result<()> {
         let profile: &mut Account<LeetCodeAccount> = &mut ctx.accounts.profile;
         let author: &Signer = &ctx.accounts.author;
@@ -58,6 +59,8 @@ pub mod solana_leetdroid {
             problem_solved,
             acceptance_rate,
             stars,
+            all_question_count: all_question_count.to_string(),
+            ac_submissin_num: ac_submissin_num.to_string(),
         };
         let serialized_account = serde_json::to_string(&account).unwrap();
 
@@ -72,6 +75,8 @@ pub mod solana_leetdroid {
         profile.problem_solved = problem_solved;
         profile.acceptance_rate = acceptance_rate;
         profile.stars = stars;
+        profile.all_question_count = all_question_count;
+        profile.ac_submissin_num = ac_submissin_num;
 
         Ok(())
     }
@@ -90,6 +95,8 @@ struct LeetcodeAccount {
     pub acceptance_rate: f32,
     // max 100.00
     pub stars: i8,
+    pub all_question_count: String,
+    pub ac_submissin_num: String,
 }
 
 #[derive(Accounts)]
@@ -123,6 +130,8 @@ pub struct LeetCodeAccount {
     pub acceptance_rate: f32,
     // max 100.00
     pub stars: i8,
+    pub all_question_count: String,
+    pub ac_submissin_num: String,
 }
 
 // Adding some useful constants for sizing properties.
@@ -147,6 +156,12 @@ const ACCEPTANCE_RATE_LENGTH: usize = 4;
 const STARS_LENGTH: usize = 1;
 const TIMESTAMP_LENGTH: usize = 8;
 
+// JSON objects
+// ~ 150-170 chars -- estimated
+const ALL_QUES_COUNT_LENGTH: usize = 170 * 4;
+// ~ 280 chars -- estimated
+const AC_SUBMISSION_NUM_LENGTH: usize = 280 * 4;
+
 impl LeetCodeAccount {
     const LEN: usize = DISCRIMINATOR_LENGTH
         + PUBLIC_KEY_LENGTH
@@ -163,7 +178,11 @@ impl LeetCodeAccount {
         + RANKING_LENGTH
         + PROBLEM_SOLVED_LENGTH
         + ACCEPTANCE_RATE_LENGTH
-        + STARS_LENGTH;
+        + STARS_LENGTH
+        + ALL_QUES_COUNT_LENGTH
+        + STRING_LENGTH_PREFIX
+        + AC_SUBMISSION_NUM_LENGTH
+        + STRING_LENGTH_PREFIX;
 }
 
 #[error_code]

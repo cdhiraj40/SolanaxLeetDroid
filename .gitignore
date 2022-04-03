@@ -15,7 +15,7 @@
 /build
 
 #idl json
-/src/idl.json
+/src/utils/idl.json
 # misc
 .DS_Store
 .env.local

@@ -2,18 +2,14 @@ import { Button } from "./Button";
 require("../App.css");
 import "./Profile.css"
 import videos from "../assets/videos/welcome.mp4";
-import { AcSubmissionNum, AllQuestionsCount, RootObject, TotalSubmissionNum } from "../api/Interfaces/LeetCodeProfile"
+import { RootObject } from "../api/Interfaces/LeetCodeProfile"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { ConnectionProvider, useAnchorWallet, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import {
-    LedgerWalletAdapter,
     PhantomWalletAdapter,
-    SlopeWalletAdapter,
-    SolflareWalletAdapter,
     SolletExtensionWalletAdapter,
     SolletWalletAdapter,
-    TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import * as anchor from "@project-serum/anchor";
 
@@ -22,14 +18,13 @@ import {
 } from "@project-serum/anchor";
 import { clusterApiUrl, Connection } from "@solana/web3.js";
 import React, { FC, ReactNode, useEffect, useMemo, useRef } from "react";
-import { ProfileCard } from "./ProfileCard";
-import totalSubmissionNum from "../api/Queries/TotalSubmissionNum"
-import allQuestionsCount from "../api/Queries/AllQuestionsCount"
-import acSubmissionNum from "../api/Queries/ACSubmissionNum"
 import idl from "../utils/idl.json"
 import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../utils/Errors";
-import { DEVNET_API, processed } from "../utils/Const";
+import { DEVNET_API, processed, SOLANA_EXPLORER } from "../utils/Const";
 import fetchProfile from "../api/fetchProfile";
+import siteLogo from "../assets/images/main_logo.png";
+import ProfileCard from "./ProfileCard";
+import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -56,10 +51,6 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
     const wallets = useMemo(
         () => [
             new PhantomWalletAdapter(),
-            new SlopeWalletAdapter(),
-            new SolflareWalletAdapter({ network }),
-            new TorusWalletAdapter(),
-            new LedgerWalletAdapter(),
             new SolletWalletAdapter({ network }),
             new SolletExtensionWalletAdapter({ network }),
         ],
@@ -77,15 +68,17 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 
 const Content: FC = () => {
 
+    const [transactionID, setTransactionID] = React.useState("")
     const [profileUsername, setProfileUsername] = React.useState("")
     const [profileName, setProfileName] = React.useState("")
     const [profileBio, setProfileBio] = React.useState("")
     const [profileRanking, setProfileRanking] = React.useState("")
     const [profileStars, setProfileStars] = React.useState(0)
-    const [profileTotalProblems, setProfileTotalProblems] = React.useState<AllQuestionsCount[]>(allQuestionsCount)
-    const [profileProblemSolved, setProfileProblemSolved] = React.useState<TotalSubmissionNum[]>(totalSubmissionNum)
-    const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<AcSubmissionNum[]>(acSubmissionNum)
+    const [profileTotalProblems, setProfileTotalProblems] = React.useState<string>("")
+    const [profileProblemSolved, setProfileProblemSolved] = React.useState<string>("")
+    const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<string>("")
     const [profilePictureUrl, setProfilePictureUrl] = React.useState("")
+    const [submitStats, setSubmitStats] = React.useState("")
     const [data, setData] = React.useState<RootObject>(null)
     const [click, setClick] = React.useState(false)
     const username = useRef(null)
@@ -132,7 +125,7 @@ const Content: FC = () => {
 
         const program = new Program(idlJSON, idl.metadata.address, provider);
 
-        const tsx = await program.rpc.sendProfile(profileUsername, profileName, profilePictureUrl, profileBio, profileRanking, profileCorrectProblemSolved[0].count, 0.0, profileStars, {
+        const tsx = await program.rpc.sendProfile(profileUsername.substring(0, 50), profileName, profilePictureUrl, profileBio, profileRanking, 1, 0.0, profileStars, profileTotalProblems, profileCorrectProblemSolved, {
             accounts: {
                 // account share...
                 profile: baseAccount.publicKey,
@@ -147,6 +140,12 @@ const Content: FC = () => {
         // log the transaction ID
         console.log("transaction ID:", tsx)
 
+        setTransactionID(tsx);
+
+        // show uploaded text and verify buttons
+        canShowSolanaExplorer(true);
+        showUploadedText(true);
+
         // After sending the transaction to the blockchain.
         // Fetch the account details of the created LeetDroid account.
         const leetdroidAccount = await program.account.leetCodeAccount.fetch(baseAccount.publicKey);
@@ -158,17 +157,28 @@ const Content: FC = () => {
             .then(data => {
                 setData(data);
 
-                setProfile(
-                    data.data.matchedUser.username,
-                    data.data.matchedUser.profile.realName,
-                    data.data.matchedUser.profile.userAvatar,
-                    data.data.matchedUser.profile.aboutMe,
-                    data.data.matchedUser.profile.ranking,
-                    data.data.matchedUser.profile.starRating,
-                    data.data.allQuestionsCount,
-                    data.data.matchedUser.submitStats.totalSubmissionNum,
-                    data.data.matchedUser.submitStats.acSubmissionNum
-                )
+                if (data) {
+
+                    // stringify the submit stats 
+                    const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
+                    const submitStats2 = JSON.stringify(data.data.matchedUser.submitStats.totalSubmissionNum)
+                    const submitStats3 = JSON.stringify(data.data.matchedUser.submitStats.acSubmissionNum)
+                    const submitStatss = submitStats1.concat(submitStats2).concat(submitStats3)
+                    console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
+
+                    setProfile(
+                        data.data.matchedUser.username,
+                        data.data.matchedUser.profile.realName,
+                        data.data.matchedUser.profile.userAvatar,
+                        data.data.matchedUser.profile.aboutMe,
+                        data.data.matchedUser.profile.ranking,
+                        data.data.matchedUser.profile.starRating,
+                        submitStats1,
+                        submitStats2,
+                        submitStats3.concat("+"), // adding + to ease the process of getting profile
+                                                // from solana-contract logs. 
+                    )
+                }
             })
 
             .catch(err => console.warn(err))
@@ -180,9 +190,9 @@ const Content: FC = () => {
             aboutMe: React.SetStateAction<string>,
             ranking: { toString: () => React.SetStateAction<string>; },
             rating: React.SetStateAction<number>,
-            allQuestionsCount: React.SetStateAction<AllQuestionsCount[]>,
-            totalSubmissionNum: React.SetStateAction<TotalSubmissionNum[]>,
-            acSubmissionNum: React.SetStateAction<AcSubmissionNum[]>
+            allQuestionsCount: React.SetStateAction<string>,
+            totalSubmissionNum: React.SetStateAction<string>,
+            acSubmissionNum: React.SetStateAction<string>,
         ) {
             if (username) {
                 setProfileUsername(username)
@@ -223,6 +233,8 @@ const Content: FC = () => {
 
 
     function setButtonClick(val: any) {
+        canShowSolanaExplorer(false);
+        showUploadedText(false);
         if (username.current.value) {
             setClick(true)
         } else {
@@ -230,26 +242,48 @@ const Content: FC = () => {
         }
     }
 
+    function openSolanaExplorer() {
+        window.open(`${SOLANA_EXPLORER}${transactionID}?cluster=devnet`)
+    }
+
+    const text1 = "Your LeetCode Profile has been added to the Blockchain !!"
+    const text2 = `You can get the profile card by pasting the below mentioned Transaction ID on the Homepage.
+    You can also verify this transaction by clicking below button. Thank you for uploading your leetcode profile on the Blockchain.
+    Transaction ID: ${transactionID}`
+
+
     return (
         <div className="profile">
             <div ref={div} className="input-container">
                 <video src={videos} autoPlay loop muted />
-                <div ref={div} className="input-container">
-                    <label>Enter your leetcode username:
-                        <input type="text" ref={username} />
-                    </label>
-                    <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={setButtonClick}>Get Profile</Button>
-                    <ProfileCard
-                        username={profileUsername.substring(0, 50)}
-                        picUrl={profilePictureUrl}
-                        name={profileName.substring(0, 50)} bio={profileBio.substring(0, 20)}
-                        ranking={profileRanking.substring(0, 10)}
-                        stars={profileStars}
-                        totalProblems={profileTotalProblems}
-                        problemSolved={profileCorrectProblemSolved} />
-                    <Button id="welcome-btns-btnsns" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={checkIfProfileFetched}>Send Profile</Button>
-                    <WalletMultiButton />
+                <img className="site-logo" src={siteLogo}></img>
+                <div className="uploaded-text">
+                    <h3 id="heading">Upload Your LeetCode Profile on<br></br>Solana Blockchain (Devnet)</h3>
+                    <h3 id="text">{text1}<br></br>{text2}</h3>
                 </div>
+                <div className="wallet-btns">
+                    <WalletMultiButton className="wallet" ></WalletMultiButton>
+                    <Button id="solana-explorer" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={openSolanaExplorer}>Verify Transaction</Button>
+                </div>
+                <label>Enter your leetcode username:
+                    <input type="text" ref={username} />
+                </label>
+                <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={setButtonClick}>Get Profile</Button>
+                <div className="cert-container">
+                    <div id="certificateWrapper-exp">
+                        <ProfileCard
+                            timeStamp = {""}
+                            QRurl= {""}
+                            username={profileUsername}
+                            picUrl={profilePictureUrl}
+                            name={profileName}
+                            bio={profileBio}
+                            problemSolved = {(profileCorrectProblemSolved == "") ? "" :JSON.parse(profileCorrectProblemSolved.substring(0,profileCorrectProblemSolved.length-1)) }
+                            totalProblems = {(profileTotalProblems == "") ? "" :JSON.parse(profileTotalProblems) }
+                        />
+                    </div>
+                </div>
+                <Button id="send-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/Upload-Profile" onClick={checkIfProfileFetched}>Send Profile</Button>
             </div>
         </div>
     );

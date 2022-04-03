@@ -67,5 +67,8 @@ export interface LeetCodeProfile {
     stars: number;
     problemSolved: number;
     acceptanceRate: number;
-    timeStamp: number;
+    timestamp: string;
+    all_question_count: string,
+    total_submission_num: string,
+    ac_submissin_num: string
 }
