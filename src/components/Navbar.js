@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from './Button';
 import './Navbar.css'
 import whiteLogo from '../assets/images/logos/logo-white.svg'
-
+import {GITHUB_PROJECT_LINK} from '../utils/Const'
 function Navbar() {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
@@ -34,6 +34,10 @@ function Navbar() {
         }
     };
 
+    const openGithub = () => {
+        window.open(GITHUB_PROJECT_LINK)
+    }
+
     window.addEventListener('scroll', changeBackground)
 
     return (
@@ -53,9 +57,9 @@ function Navbar() {
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/Projects' className='nav-links' onClick={closeMobileMenu}>
+                            <div className='nav-links' onClick={openGithub}>
                                 Github
-                            </Link>
+                            </div>
                         </li>
                     </ul>
                     {/* Navbar Mobile Buttons */}
