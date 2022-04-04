@@ -29,12 +29,12 @@ async function GetTransaction(transactionID) {
         .then(async response => await response.json())
         .catch(error => console.log('error', error));
 
-        console.log("Fetched raw transaction from transaction ID", data)
+    console.log("Fetched raw transaction from transaction ID", data)
 
-        // it comes null 30% of times, really not sure why its happening.
-        if(data.result === null ){
-            GetTransaction(transactionID)
-        } else{
+    // it comes null 30% of times, really not sure why its happening.
+    if (data.result === null) {
+        tryAgainError()
+    } else {
         var main = data.result.meta.logMessages[4];
 
         // remove unnessasary text and trimmed important data to JSON
@@ -53,7 +53,7 @@ async function GetTransaction(transactionID) {
         console.log("Fetched JSON from transaction ID", mainJSON)
 
         return mainJSON;
-        }
+    }
 }
 
 export default GetTransaction;
