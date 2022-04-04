@@ -12,9 +12,9 @@ The idea came when I was exploring blockchain projects particularly Solana ones 
 
 This project "<b>Solana x LeetDroid</b>" provides user to upload their profile into Solana Blockchain (Devnet). It lets user fetch their LeetCode profile via a simple UI. Once you have fetched your profile, you can connect to your wallet. The dApp provides more than 5 wallets and once you are connected you can send your profile into blockchain under 10 seconds. Yes its that fast!(Read more about Solana from [here](https://solana.com/news/getting-started-with-solana-development). It shows user the transaction ID which one can use it on home page to generate their custom profile card with a QR code embedded in it which gives you the transaction ID of the transaction after scanning it. So no need at all to remember your transaction ID. One can always regenerate their profile card after inputting their transaction ID. If you are new to dApps and dont know how to get started with this one? Dont worry at all! There is also a [how to use section](https://solanaxleetdroid-cdhiraj40.vercel.app/how-to-use)(or if you are fan of github readmes then same is [here](https://github.com/cdhiraj40/SolanaxLeetDroid/blob/master/GET_STARTED.md) too.) so any beginner can add their LeetCode profile to blockchain just like that. if you still face any issues feel free to create an issue, I would love to help. 
 
-### Screenshots
+### Collage/Screenshots
 
-<img src ="src/assets/solana_x_leetdroid_collage.png" align="center">
+<img src ="src/assets/images/solana_x_leetdroid_collage.png" align="center">
 
 ## 👇 Prerequisites
 
