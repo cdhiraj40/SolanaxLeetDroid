@@ -33,9 +33,8 @@ async function GetTransaction(transactionID) {
 
         // it comes null 30% of times, really not sure why its happening.
         if(data.result === null ){
-            tryAgainError()
-            return
-        }
+            GetTransaction(transactionID)
+        } else{
         var main = data.result.meta.logMessages[4];
 
         // remove unnessasary text and trimmed important data to JSON
@@ -54,6 +53,7 @@ async function GetTransaction(transactionID) {
         console.log("Fetched JSON from transaction ID", mainJSON)
 
         return mainJSON;
+        }
 }
 
 export default GetTransaction;
