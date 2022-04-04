@@ -22,3 +22,6 @@ export const transactionNotProvided = () => {
 export const generalError = () => {
     toast('oops, something went wrong. Please try again.')
 }
+export const tryAgainError = () => {
+    toast('oops, something went wrong. Please click on Get Transaction again.')
+}

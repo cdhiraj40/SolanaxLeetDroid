@@ -1,5 +1,5 @@
 import { DEVNET_API } from "../utils/Const";
-import { generalError } from "../utils/Errors";
+import { tryAgainError } from "../utils/Errors";
 
 
 
@@ -31,6 +31,11 @@ async function GetTransaction(transactionID) {
 
         console.log("Fetched raw transaction from transaction ID", data)
 
+        // it comes null 30% of times, really not sure why its happening.
+        if(data.result === null ){
+            tryAgainError()
+            return
+        }
         var main = data.result.meta.logMessages[4];
 
         // remove unnessasary text and trimmed important data to JSON
