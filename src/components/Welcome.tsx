@@ -56,13 +56,6 @@ const Welcome: FC = () => {
         }
     }
 
-    // async function getTransaction() {
-    //     await GetTransaction(transactionID)
-    //         .then(async profile => setProfile(profile))
-    //         .catch(err => console.warn("error while fetching transaction", err))
-
-    //     setQRurl(transactionID);
-    // }
 
     function downloadProfile(element) {
         element.preventDefault();
