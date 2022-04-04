@@ -1,6 +1,6 @@
 import { Button } from './Button';
 import './Welcome.css'
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 require('../App.css');
 import videos from "../assets/videos/welcome.mp4";
 import siteLogo from "../assets/images/main_logo.png";
@@ -21,11 +21,24 @@ const Welcome: FC = () => {
     const [transactionID, setTransactionID] = useState('')
     const [QRurl, setQRurl] = useState("")
 
-    function getStarted() {
-        if (div && div.current) {
-            div.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    const [callback, setCallback] = useState(false)
+
+    useEffect(() => {
+
+        if (callback) {
+            (async () => {
+                await GetTransaction(transactionID).then(data => {
+                    if (data) {
+                        setProfile(data);
+                        setQRurl(transactionID);
+                    }
+                }).catch(err => console.warn(err))
+
+            })();
         }
-    }
+        setCallback(false)
+    }, [callback]);
+
 
     function _scrollTo(yOffset = 0) {
         if (div && div.current) {
@@ -37,21 +50,19 @@ const Welcome: FC = () => {
 
     function checkIfTransactionID() {
         if (transactionID) {
-            getTransaction()
+            setCallback(true)
         } else {
             transactionNotProvided()
         }
     }
 
-    function getTransaction() {
-        GetTransaction(transactionID)
-            .then(profile => {
-                setProfile(profile)
-            })
-            .catch(err => console.warn("error while fetching transaction", err))
+    // async function getTransaction() {
+    //     await GetTransaction(transactionID)
+    //         .then(async profile => setProfile(profile))
+    //         .catch(err => console.warn("error while fetching transaction", err))
 
-        setQRurl(transactionID);
-    }
+    //     setQRurl(transactionID);
+    // }
 
     function downloadProfile(element) {
         element.preventDefault();

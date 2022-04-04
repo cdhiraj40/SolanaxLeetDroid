@@ -153,79 +153,78 @@ const Content: FC = () => {
     }
 
     useEffect(() => {
-        fetchProfile(username.current.value)
-            .then(data => {
-                setData(data);
-
-                if (data) {
-
-                    // stringify the submit stats 
-                    const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
-                    const submitStats2 = JSON.stringify(data.data.matchedUser.submitStats.totalSubmissionNum)
-                    const submitStats3 = JSON.stringify(data.data.matchedUser.submitStats.acSubmissionNum)
-                    const submitStatss = submitStats1.concat(submitStats2).concat(submitStats3)
-                    console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
-
-                    setProfile(
-                        data.data.matchedUser.username,
-                        data.data.matchedUser.profile.realName,
-                        data.data.matchedUser.profile.userAvatar,
-                        data.data.matchedUser.profile.aboutMe,
-                        data.data.matchedUser.profile.ranking,
-                        data.data.matchedUser.profile.starRating,
-                        submitStats1,
-                        submitStats2,
-                        submitStats3.concat("+"), // adding + to ease the process of getting profile
-                                                // from solana-contract logs. 
-                    )
-                }
-            })
-
-            .catch(err => console.warn(err))
-
-        async function setProfile(
-            username: React.SetStateAction<string>,
-            name: React.SetStateAction<string>,
-            profilePicUrl: React.SetStateAction<string>,
-            aboutMe: React.SetStateAction<string>,
-            ranking: { toString: () => React.SetStateAction<string>; },
-            rating: React.SetStateAction<number>,
-            allQuestionsCount: React.SetStateAction<string>,
-            totalSubmissionNum: React.SetStateAction<string>,
-            acSubmissionNum: React.SetStateAction<string>,
-        ) {
-            if (username) {
-                setProfileUsername(username)
-            }
-            if (name) {
-                setProfileName(name)
-            }
-            if (profilePicUrl) {
-                setProfilePictureUrl(profilePicUrl)
-            }
-            if (aboutMe) {
-                setProfileBio(aboutMe)
-            }
-            if (ranking) {
-                setProfileRanking(ranking.toString())
-            }
-            if (rating) {
-                setProfileStars(rating)
-            }
-            if (allQuestionsCount) {
-                setProfileTotalProblems(allQuestionsCount)
-            }
-            if (totalSubmissionNum) {
-                setProfileProblemSolved(totalSubmissionNum)
-            }
-            if (acSubmissionNum) {
-                setProfileCorrectProblemSolved(acSubmissionNum)
-            }
-        }
-
         if (click) {
             (async () => {
-                fetchProfile(username.current.value)
+                // if something breaks there you know this await did that
+                await fetchProfile(username.current.value)
+                    .then(data => {
+                        setData(data);
+
+                        if (data) {
+
+                            // stringify the submit stats 
+                            const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
+                            const submitStats2 = JSON.stringify(data.data.matchedUser.submitStats.totalSubmissionNum)
+                            const submitStats3 = JSON.stringify(data.data.matchedUser.submitStats.acSubmissionNum)
+                            const submitStatss = submitStats1.concat(submitStats2).concat(submitStats3)
+                            console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
+
+                            setProfile(
+                                data.data.matchedUser.username,
+                                data.data.matchedUser.profile.realName,
+                                data.data.matchedUser.profile.userAvatar,
+                                data.data.matchedUser.profile.aboutMe,
+                                data.data.matchedUser.profile.ranking,
+                                data.data.matchedUser.profile.starRating,
+                                submitStats1,
+                                submitStats2,
+                                submitStats3.concat("+"), // adding + to ease the process of getting profile
+                                // from solana-contract logs. 
+                            )
+                        }
+                    })
+
+                    .catch(err => console.warn(err))
+
+                async function setProfile(
+                    username: React.SetStateAction<string>,
+                    name: React.SetStateAction<string>,
+                    profilePicUrl: React.SetStateAction<string>,
+                    aboutMe: React.SetStateAction<string>,
+                    ranking: { toString: () => React.SetStateAction<string>; },
+                    rating: React.SetStateAction<number>,
+                    allQuestionsCount: React.SetStateAction<string>,
+                    totalSubmissionNum: React.SetStateAction<string>,
+                    acSubmissionNum: React.SetStateAction<string>,
+                ) {
+                    if (username) {
+                        setProfileUsername(username)
+                    }
+                    if (name) {
+                        setProfileName(name)
+                    }
+                    if (profilePicUrl) {
+                        setProfilePictureUrl(profilePicUrl)
+                    }
+                    if (aboutMe) {
+                        setProfileBio(aboutMe)
+                    }
+                    if (ranking) {
+                        setProfileRanking(ranking.toString())
+                    }
+                    if (rating) {
+                        setProfileStars(rating)
+                    }
+                    if (allQuestionsCount) {
+                        setProfileTotalProblems(allQuestionsCount)
+                    }
+                    if (totalSubmissionNum) {
+                        setProfileProblemSolved(totalSubmissionNum)
+                    }
+                    if (acSubmissionNum) {
+                        setProfileCorrectProblemSolved(acSubmissionNum)
+                    }
+                }
             })();
         }
         setClick(false)
@@ -272,14 +271,14 @@ const Content: FC = () => {
                 <div className="cert-container">
                     <div id="certificateWrapper-exp">
                         <ProfileCard
-                            timeStamp = {""}
-                            QRurl= {""}
+                            timeStamp={""}
+                            QRurl={""}
                             username={profileUsername}
                             picUrl={profilePictureUrl}
                             name={profileName}
                             bio={profileBio}
-                            problemSolved = {(profileCorrectProblemSolved == "") ? "" :JSON.parse(profileCorrectProblemSolved.substring(0,profileCorrectProblemSolved.length-1)) }
-                            totalProblems = {(profileTotalProblems == "") ? "" :JSON.parse(profileTotalProblems) }
+                            problemSolved={(profileCorrectProblemSolved == "") ? "" : JSON.parse(profileCorrectProblemSolved.substring(0, profileCorrectProblemSolved.length - 1))}
+                            totalProblems={(profileTotalProblems == "") ? "" : JSON.parse(profileTotalProblems)}
                         />
                     </div>
                 </div>

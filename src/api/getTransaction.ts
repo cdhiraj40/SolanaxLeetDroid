@@ -29,7 +29,6 @@ async function GetTransaction(transactionID) {
         .then(async response => await response.json())
         .catch(error => console.log('error', error));
 
-    try {
         console.log("Fetched raw transaction from transaction ID", data)
 
         var main = data.result.meta.logMessages[4];
@@ -50,10 +49,6 @@ async function GetTransaction(transactionID) {
         console.log("Fetched JSON from transaction ID", mainJSON)
 
         return mainJSON;
-    } catch(e) {
-        generalError()
-        return;
-    }
 }
 
 export default GetTransaction;
