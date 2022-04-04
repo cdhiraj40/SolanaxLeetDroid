@@ -7,9 +7,13 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { ConnectionProvider, useAnchorWallet, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import {
+    LedgerWalletAdapter,
     PhantomWalletAdapter,
+    SlopeWalletAdapter,
+    SolflareWalletAdapter,
     SolletExtensionWalletAdapter,
     SolletWalletAdapter,
+    TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import * as anchor from "@project-serum/anchor";
 
@@ -51,6 +55,9 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
     const wallets = useMemo(
         () => [
             new PhantomWalletAdapter(),
+            new SlopeWalletAdapter(),
+            new SolflareWalletAdapter({ network }),
+            new LedgerWalletAdapter(),
             new SolletWalletAdapter({ network }),
             new SolletExtensionWalletAdapter({ network }),
         ],
