@@ -4,8 +4,9 @@ import './ProfileCard.css'
 
 const SOLANA_LOGO = require('../assets/images/solanaLogoMark.png')
 const LEETDROID_LOGO = require('../assets/images/LeetDroidLogo.png')
+
 const ProfileCard = profile => {
-    
+
     var username = (profile.username == "") ? "" : `@${profile.username}`;
     var picUrl = (profile.picUrl == "") ? DEFAULT_PROFILE_URL : profile.picUrl;
     var QRurl = (profile.QRurl == "") ? "" : profile.QRurl;
@@ -19,17 +20,19 @@ const ProfileCard = profile => {
     return (
         <div className="wrapper">
             <div className="profile-card js-profile-card">
-                {/* <div className="solana-logo">
-                <img src={SOLANA_LOGO} alt="profile card"></img>
-                </div>
-                <div className="leetdroid-logo">
-                <img  src={LEETDROID_LOGO} alt="profile card"></img>
-                </div> */}
                 <div className="profile-card__img">
                     <img src={picUrl} alt="profile card"></img>
                 </div>
 
                 <div className="profile-card__cnt js-profile-cnt">
+                    {profile.showLoader ? (
+                    <div className="fancy-spinner">
+                        <div className="ring"></div>
+                        <div className="ring"></div>
+                        <div className="dot"></div>
+                    </div>
+                    ) : (profile.showLoader)}
+
                     <div className="profile-card__username">{username}</div>
                     <div className="profile-card__name">{profile.name}</div>
                     <div className="profile-card__txt">{profile.bio}</div>

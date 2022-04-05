@@ -21,7 +21,7 @@ const Welcome: FC = () => {
     const certificateWrapper = React.createRef();
     const [transactionID, setTransactionID] = useState('')
     const [QRurl, setQRurl] = useState("")
-
+    const [loader, setLoader] = React.useState(false)
     const [callback, setCallback] = useState(false)
 
     useEffect(() => {
@@ -29,9 +29,13 @@ const Welcome: FC = () => {
         if (callback) {
             (async () => {
                 await GetTransaction(transactionID).then(data => {
-                    if (data) {
+                    if(data === false){
+                        setLoader(false)
+                    }
+                    else if (data) {
                         setProfile(data);
                         setQRurl(transactionID);
+                        setLoader(false)
                     }
                 }).catch(err => console.warn(err))
 
@@ -46,6 +50,7 @@ const Welcome: FC = () => {
 
     function checkIfTransactionID() {
         if (transactionID) {
+            setLoader(true)
             setCallback(true)
         } else {
             transactionNotProvided()
@@ -96,6 +101,7 @@ const Welcome: FC = () => {
                                 timeStamp={profile.timestamp}
                                 problemSolved={(profile.ac_submissin_num == "") ? "" : JSON.parse(profile.ac_submissin_num)}
                                 totalProblems={(profile.all_question_count == "") ? "" : JSON.parse(profile.all_question_count)}
+                                showLoader = {loader}
                             />
                         </div>
                     </div>

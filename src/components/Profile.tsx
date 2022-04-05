@@ -30,7 +30,6 @@ import siteLogo from "../assets/images/main_logo.png";
 import ProfileCard from "./ProfileCard";
 import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions";
 import { scrollToView } from "../utils/scrollToView";
-import * as ReactBootStrap from "react-bootstrap";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -87,9 +86,9 @@ const Content: FC = () => {
     const [profileProblemSolved, setProfileProblemSolved] = React.useState<string>("")
     const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<string>("")
     const [profilePictureUrl, setProfilePictureUrl] = React.useState("")
-    const [submitStats, setSubmitStats] = React.useState("")
     const [data, setData] = React.useState<RootObject>(null)
     const [click, setClick] = React.useState(false)
+    const [loader, setLoader] = React.useState(false)
     const username = useRef(null)
     const div = useRef(null)
 
@@ -165,7 +164,6 @@ const Content: FC = () => {
     useEffect(() => {
         if (click) {
             (async () => {
-                // if something breaks there you know this await did that
                 await fetchProfile(username.current.value)
                     .then(data => {
                         setData(data);
@@ -177,7 +175,7 @@ const Content: FC = () => {
                             const submitStats2 = JSON.stringify(data.data.matchedUser.submitStats.totalSubmissionNum)
                             const submitStats3 = JSON.stringify(data.data.matchedUser.submitStats.acSubmissionNum)
                             console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
-
+                            setLoader(false)
                             setProfile(
                                 data.data.matchedUser.username,
                                 data.data.matchedUser.profile.realName,
@@ -244,6 +242,7 @@ const Content: FC = () => {
         canShowSolanaExplorer(false);
         showUploadedText(false);
         if (username.current.value) {
+            setLoader(true)
             setClick(true)
         } else {
             usernameNotProvided()
@@ -265,7 +264,6 @@ const Content: FC = () => {
             <div ref={div} className="input-container">
                 <video src={videos} autoPlay loop muted />
                 <img className="site-logo" src={siteLogo}></img>
-                {<ReactBootStrap.Spinner animation="border"/>}
                 <div className="uploaded-text">
                     <h3 id="heading">Upload Your LeetCode Profile on<br></br>Solana Blockchain (Devnet)</h3>
                     <h3 id="text">{text1}<br></br>{text2}</h3>
@@ -289,6 +287,7 @@ const Content: FC = () => {
                             bio={profileBio}
                             problemSolved={(profileCorrectProblemSolved == "") ? "" : JSON.parse(profileCorrectProblemSolved.substring(0, profileCorrectProblemSolved.length - 1))}
                             totalProblems={(profileTotalProblems == "") ? "" : JSON.parse(profileTotalProblems)}
+                            showLoader={loader}
                         />
                     </div>
                 </div>

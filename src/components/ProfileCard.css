@@ -202,6 +202,52 @@ html {
 	 letter-spacing: -1px;
 	 margin-top: 7px;
 }
+
+.fancy-spinner {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 5rem;
+	height: 5rem;
+}
+.fancy-spinner div {
+	position: absolute;
+	width: 4rem;
+	height: 4rem;
+	border-radius: 50%;
+}
+.fancy-spinner div.ring {
+	border-width: 0.5rem;
+	border-style: solid;
+	border-color: transparent;
+	animation: 2s fancy infinite alternate;
+}
+.fancy-spinner div.ring:nth-child(1) {
+	border-left-color: #00308F;
+	border-right-color: #00308F;
+}
+.fancy-spinner div.ring:nth-child(2) {
+	border-top-color: #00308F;
+	border-bottom-color: #00308F;
+	animation-delay: 1s;
+}
+.fancy-spinner div.dot {
+	width: 1rem;
+	height: 1rem;
+	background: #6CB4EE;
+}
+@keyframes fancy {
+	to {
+		transform: rotate(360deg) scale(0.5);
+   }
+}
+
  @media screen and (max-width: 768px) {
 	 .profile-card-social__item {
 		 width: 50px;

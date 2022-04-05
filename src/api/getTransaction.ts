@@ -34,6 +34,7 @@ async function GetTransaction(transactionID) {
     // it comes null 30% of times, really not sure why its happening.
     if (data.result === null) {
         tryAgainError()
+        return false
     } else {
         var main = data.result.meta.logMessages[4];
 
