@@ -18,8 +18,8 @@ This project "<b>Solana x LeetDroid</b>" provides user to upload their profile i
 
 ## 👇 Prerequisites
 
-Before installation, please make sure you have already installed the following tools:
-The project is using [Anchor Framework](https://github.com/cdhiraj40/SolanaxLeetDroid/master/README.md#:~:text=functionalities%20in%20dApp%20%3A-,Anchor%20Framework,-In%20basic%20terms) to build smart contracts.
+Before installation, please make sure you have already installed the following tools:<br/>
+The project is using [Anchor Framework](https://project-serum.github.io/anchor/getting-started/introduction.html) to build smart contracts.
 - [Anchor Framework](https://project-serum.github.io/anchor/getting-started/installation.html)
 
 some other optional prerequisites if you are interested in contributing.
