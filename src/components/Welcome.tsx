@@ -10,6 +10,7 @@ import { transactionNotProvided } from '../utils/Errors';
 import LeetCodeProfileBlockchain from '../api/Queries/LeetCodeProfile';
 import GetTransaction from '../api/getTransaction';
 import ProfileCard from './ProfileCard';
+import { scrollToView } from '../utils/scrollToView';
 
 const Welcome: FC = () => {
 
@@ -39,13 +40,8 @@ const Welcome: FC = () => {
         setCallback(false)
     }, [callback]);
 
-
-    function _scrollTo(yOffset = 0) {
-        if (div && div.current) {
-            const y = div.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-            div.current.scrollIntoView({ top: y, behavior: "smooth", block: "center" });
-        }
+    const getStarted = () => {
+        scrollToView(div.current.offsetTop)
     }
 
     function checkIfTransactionID() {
@@ -72,7 +68,7 @@ const Welcome: FC = () => {
                 <video src={videos} autoPlay loop muted />
                 <img src={siteLogo}></img>
                 <div className="welcome-btns">
-                    <Button id="get-started" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={_scrollTo} to="/" type="light" >Get Started</Button>
+                    <Button id="get-started" buttonStyle='btn--outline' buttonSize='btn--medium' onClick={getStarted} to="/" type="light" >Get Started</Button>
                 </div>
             </div>
             <div ref={div} className="input-container">

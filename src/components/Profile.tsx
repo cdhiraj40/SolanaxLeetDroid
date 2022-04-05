@@ -29,6 +29,8 @@ import fetchProfile from "../api/fetchProfile";
 import siteLogo from "../assets/images/main_logo.png";
 import ProfileCard from "./ProfileCard";
 import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions";
+import { scrollToView } from "../utils/scrollToView";
+import * as ReactBootStrap from "react-bootstrap";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -148,6 +150,7 @@ const Content: FC = () => {
         console.log("transaction ID:", tsx)
 
         setTransactionID(tsx);
+        scrollToView(div.current.offsetTop);
 
         // show uploaded text and verify buttons
         canShowSolanaExplorer(true);
@@ -173,7 +176,6 @@ const Content: FC = () => {
                             const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
                             const submitStats2 = JSON.stringify(data.data.matchedUser.submitStats.totalSubmissionNum)
                             const submitStats3 = JSON.stringify(data.data.matchedUser.submitStats.acSubmissionNum)
-                            const submitStatss = submitStats1.concat(submitStats2).concat(submitStats3)
                             console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
 
                             setProfile(
@@ -263,6 +265,7 @@ const Content: FC = () => {
             <div ref={div} className="input-container">
                 <video src={videos} autoPlay loop muted />
                 <img className="site-logo" src={siteLogo}></img>
+                {<ReactBootStrap.Spinner animation="border"/>}
                 <div className="uploaded-text">
                     <h3 id="heading">Upload Your LeetCode Profile on<br></br>Solana Blockchain (Devnet)</h3>
                     <h3 id="text">{text1}<br></br>{text2}</h3>
