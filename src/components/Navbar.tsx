@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { Button } from './Button';
 import './Navbar.css'
-import whiteLogo from '../assets/images/logos/logo-white.svg'
 import {GITHUB_PROJECT_LINK} from '../utils/Const'
 function Navbar() {
     const [click, setClick] = useState(false);
@@ -44,9 +43,6 @@ function Navbar() {
         <>
             <nav className={navbar ? 'navbar active' : 'navbar'}>
                 <div className="navbar-container">
-                    <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-                        <img className='navbar-icon' src={whiteLogo} alt='Dhiraj Logo' />
-                    </Link>
                     <div className="menu-icon" onClick={handleClick}>
                         <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
                     </div>
