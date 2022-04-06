@@ -116,6 +116,12 @@
     display: none;
 }
 
+.navbar-container #how-to-use {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 960px) {
     .NavbarItems {
         position: relative;

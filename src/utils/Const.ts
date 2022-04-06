@@ -5,3 +5,5 @@ export const processed = "processed"
 export const DEFAULT_PROFILE_URL = "https://s3-us-west-1.amazonaws.com/s3-lc-upload/assets/default_avatar.jpg"
 export const SOLANA_EXPLORER = "https://explorer.solana.com/tx/"
 export const GITHUB_PROJECT_LINK = "https://github.com/cdhiraj40/SolanaxLeetDroid"
+
+export type Nullable<T> = T | null;

@@ -168,7 +168,7 @@ const Content: FC = () => {
                     .then(data => {
                         setData(data);
 
-                        if (data) {
+                        if (data == true) {
 
                             // stringify the submit stats 
                             const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
@@ -188,6 +188,8 @@ const Content: FC = () => {
                                 submitStats3.concat("+"), // adding + to ease the process of getting profile
                                 // from solana-contract logs. 
                             )
+                        } else {
+                            setLoader(false)
                         }
                     })
 
