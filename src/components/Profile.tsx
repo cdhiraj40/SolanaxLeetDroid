@@ -168,7 +168,7 @@ const Content: FC = () => {
                     .then(data => {
                         setData(data);
 
-                        if (data == true) {
+                        if (data) {
 
                             // stringify the submit stats 
                             const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
