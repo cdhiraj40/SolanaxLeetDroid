@@ -19,6 +19,23 @@ export function canShowSolanaExplorer(showSolanaExplorer: Boolean) {
 }
 
 /**
+ *
+ * @param showCopyTsxID
+ */
+export function canShowCopyTsxID(showCopyTsxID: Boolean) {
+    const button = document.getElementById('copy-tsx-id');
+    if (button) {
+        if (showCopyTsxID) {
+            button.style.visibility = "visible";
+            button.style.display = "inline";
+        } else {
+            button.style.visibility = "hidden";
+            button.style.display = "none";
+        }
+    }
+}
+
+/**
  * show uploaded text on profile page.
  * if canShowUploadedText is true
  * don't show if canShowUploadedText is false

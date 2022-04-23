@@ -1,10 +1,9 @@
-import { Button } from "./Button";
-require("../App.css");
+import {Button} from "./Button";
 import "./Profile.css"
 import videos from "../assets/videos/welcome.mp4";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
-import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import {WalletAdapterNetwork} from "@solana/wallet-adapter-base";
+import {ConnectionProvider, WalletProvider} from "@solana/wallet-adapter-react";
+import {WalletModalProvider, WalletMultiButton} from "@solana/wallet-adapter-react-ui";
 import {
     LedgerWalletAdapter,
     PhantomWalletAdapter,
@@ -14,34 +13,35 @@ import {
     SolletWalletAdapter
 } from "@solana/wallet-adapter-wallets";
 
-import { clusterApiUrl } from "@solana/web3.js";
-import React, { FC, ReactNode, useEffect, useMemo, useRef } from "react";
-import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../utils/Errors";
-import { profileAddedText, profileAddedTextTsx, SOLANA_EXPLORER_URL } from "../utils/Const";
+import {clusterApiUrl} from "@solana/web3.js";
+import React, {FC, ReactNode, useEffect, useMemo, useRef} from "react";
+import {profileNotFetched, usernameNotProvided, walletNotProvided} from "../utils/Errors";
+import {profileAddedText, profileAddedTextTsx, SOLANA_EXPLORER_URL} from "../utils/Const";
 import fetchProfile from "../api/fetchProfile";
 import siteLogo from "../assets/images/main_logo.png";
 import ProfileCard from "./ProfileCard";
-import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions";
-import { scrollToView } from "../utils/scrollToView";
+import {canShowCopyTsxID, canShowSolanaExplorer, showUploadedText} from "../utils/showConditions";
+import {scrollToView} from "../utils/scrollToView";
 import getProvider from "../api/getProvider";
 import getAnchorWallet from "../api/getAnchorWallet";
-import { LeetCodeProfile } from '../api/Interfaces/LeetCodeProfile';
+import {LeetCodeProfile} from '../api/Interfaces/LeetCodeProfile';
 import LeetCodeProfileBlockchain from "../api/Queries/LeetCodeProfile";
 import sendProfile from "../api/sendProfile";
+import copyText from "../utils/copyText";
+
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
-
 
 const Profile: FC = () => {
     return (
         <Context>
-            <Content />
+            <Content/>
         </Context>
     );
 };
 export default Profile;
 
-const Context: FC<{ children: ReactNode }> = ({ children }) => {
+const Context: FC<{ children: ReactNode }> = ({children}) => {
     // The Wallet network is set to "devnet".
     const network = WalletAdapterNetwork.Devnet;
 
@@ -53,10 +53,10 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
         () => [
             new PhantomWalletAdapter(),
             new SlopeWalletAdapter(),
-            new SolflareWalletAdapter({ network }),
+            new SolflareWalletAdapter({network}),
             new LedgerWalletAdapter(),
-            new SolletWalletAdapter({ network }),
-            new SolletExtensionWalletAdapter({ network }),
+            new SolletWalletAdapter({network}),
+            new SolletExtensionWalletAdapter({network}),
         ],
         [network]
     );
@@ -110,6 +110,7 @@ const Content: FC = () => {
 
                 // show uploaded text and verify buttons
                 canShowSolanaExplorer(true);
+                canShowCopyTsxID(true);
                 showUploadedText(true);
             }
 
@@ -127,7 +128,7 @@ const Content: FC = () => {
                             // using a constant to increase readability
                             const user = response.data;
 
-                            // stringify the submit stats 
+                            // stringify the "submit stats"
                             setProfileTotalProblems(JSON.stringify(user.allQuestionsCount))
                             setProfileProblemSolved(JSON.stringify(user.matchedUser.submitStats.totalSubmissionNum))
 
@@ -189,7 +190,9 @@ const Content: FC = () => {
 
     function setButtonClick(val: any) {
         canShowSolanaExplorer(false);
+        canShowCopyTsxID(false);
         showUploadedText(false);
+
         if (username.current.value) {
             setLoader(true)
             setClick(true)
@@ -202,36 +205,45 @@ const Content: FC = () => {
         window.open(`${SOLANA_EXPLORER_URL}${transactionID}?cluster=devnet`)
     }
 
+    function onClickCopy(){
+        copyText(transactionID).then()
+    }
+
 
     return (
         <div className="profile">
             <div ref={div} className="input-container">
-                <video src={videos} autoPlay loop muted />
-                <img className="site-logo" src={siteLogo}></img>
+                <video src={videos} autoPlay loop muted/>
+                <img alt="site logo" className="site-logo" src={siteLogo}/>
                 <div className="uploaded-text">
-                    <h3 id="heading">Upload Your LeetCode Profile on<br></br>Solana Blockchain (Devnet)</h3>
-                    <h3 id="text">{profileAddedText}<br></br>{profileAddedTextTsx(transactionID)}</h3>
+                    <h3 id="heading">Upload Your LeetCode Profile on<br/>Solana Blockchain (Devnet)</h3>
+                    <h3 id="text">{profileAddedText}<br/>{profileAddedTextTsx(transactionID)}</h3>
                 </div>
                 <div className="wallet-btns">
-                    <WalletMultiButton className="wallet" ></WalletMultiButton>
-                    <Button id="solana-explorer" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/upload-profile" onClick={openSolanaExplorer}>Verify Transaction</Button>
+                    <WalletMultiButton className="wallet"/>
+                    <Button id="copy-tsx-id" buttonStyle="btn--outline" buttonSize="btn--medium" type="light"
+                            to="/upload-profile" onClick={onClickCopy}>Copy Transaction ID</Button>
+                    <Button id="solana-explorer" buttonStyle="btn--outline" buttonSize="btn--medium" type="light"
+                            to="/upload-profile" onClick={openSolanaExplorer}>Verify Transaction</Button>
                 </div>
                 <label>Enter your leetcode username:
-                    <input type="text" ref={username} />
+                    <input type="text" ref={username}/>
                 </label>
-                <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/upload-profile" onClick={setButtonClick}>Get Profile</Button>
+                <Button id="get-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light"
+                        to="/upload-profile" onClick={setButtonClick}>Get Profile</Button>
                 <div className="cert-container">
                     <div id="certificateWrapper-exp">
                         <ProfileCard
                             profile={profile}
                             QRurl={""}
-                            problemSolved={(profileCorrectProblemSolved == "") ? "" : JSON.parse(profileCorrectProblemSolved.substring(0, profileCorrectProblemSolved.length - 1))}
-                            totalProblems={(profileTotalProblems == "") ? "" : JSON.parse(profileTotalProblems)}
+                            problemSolved={(profileCorrectProblemSolved === "") ? "" : JSON.parse(profileCorrectProblemSolved.substring(0, profileCorrectProblemSolved.length - 1))}
+                            totalProblems={(profileTotalProblems === "") ? "" : JSON.parse(profileTotalProblems)}
                             showLoader={loader}
                         />
                     </div>
                 </div>
-                <Button id="send-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light" to="/upload-profile" onClick={checkIfProfileFetched}>Send Profile</Button>
+                <Button id="send-profile" buttonStyle="btn--outline" buttonSize="btn--medium" type="light"
+                        to="/upload-profile" onClick={checkIfProfileFetched}>Send Profile</Button>
             </div>
         </div>
     );

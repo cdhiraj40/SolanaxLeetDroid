@@ -69,7 +69,7 @@ const Welcome: FC = () => {
                 </div>
             </div>
             <div ref={div} className="input-container">
-                <label>Enter your trasaction ID:
+                <label>Enter your transaction ID:
                     <input type="text" onChange={e => setTransactionID(e.target.value.trim())}/>
                 </label>
 

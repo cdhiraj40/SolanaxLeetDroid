@@ -26,11 +26,18 @@ video {
     display: none;
 }
 
+.wallet-btns #copy-tsx-id {
+    visibility: hidden;
+    display: none;
+}
+
 .wallet-adapter-button.wallet {
     background-color: transparent;
     font-size: 16px;
     margin-top: 1%;
     width: fit-content;
+    display: flex;
+    margin-bottom: 10%;
     color: #FFF;
     border: 2px solid rgb(216, 2, 134);
     border-radius: 0;
