@@ -12,8 +12,7 @@ import {
     SlopeWalletAdapter,
     SolflareWalletAdapter,
     SolletExtensionWalletAdapter,
-    SolletWalletAdapter,
-    TorusWalletAdapter,
+    SolletWalletAdapter
 } from "@solana/wallet-adapter-wallets";
 import * as anchor from "@project-serum/anchor";
 
@@ -30,6 +29,7 @@ import siteLogo from "../assets/images/main_logo.png";
 import ProfileCard from "./ProfileCard";
 import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions";
 import { scrollToView } from "../utils/scrollToView";
+import getProvider from "../api/getProvider";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -102,24 +102,10 @@ const Content: FC = () => {
 
     const wallet = useAnchorWallet();
 
-    function getProvider() {
-        if (!wallet) {
-            return null;
-        }
-
-        /* Create the provider and return it to the caller */
-        const connection = new Connection(DEVNET_API, processed)
-
-        const provider = new Provider(
-            connection, wallet, { "preflightCommitment": processed },
-        );
-        return provider
-    }
-
     async function sendProfile() {
         const baseAccount = web3.Keypair.generate()
         const key = baseAccount.publicKey
-        const provider = getProvider()
+        const provider = getProvider(wallet)
 
         if (!provider) {
             walletNotProvided()
@@ -169,20 +155,23 @@ const Content: FC = () => {
                         setData(data);
 
                         if (data) {
+                            // using a constant to increase readability
+                            const user  = data.data;
 
                             // stringify the submit stats 
-                            const submitStats1 = JSON.stringify(data.data.allQuestionsCount)
-                            const submitStats2 = JSON.stringify(data.data.matchedUser.submitStats.totalSubmissionNum)
-                            const submitStats3 = JSON.stringify(data.data.matchedUser.submitStats.acSubmissionNum)
+                            const submitStats1 = JSON.stringify(user.allQuestionsCount)
+                            const submitStats2 = JSON.stringify(user.matchedUser.submitStats.totalSubmissionNum)
+                            const submitStats3 = JSON.stringify(user.matchedUser.submitStats.acSubmissionNum)
                             console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
+
                             setLoader(false)
                             setProfile(
-                                data.data.matchedUser.username,
-                                data.data.matchedUser.profile.realName,
-                                data.data.matchedUser.profile.userAvatar,
-                                data.data.matchedUser.profile.aboutMe,
-                                data.data.matchedUser.profile.ranking,
-                                data.data.matchedUser.profile.starRating,
+                                user.matchedUser.username,
+                                user.matchedUser.profile.realName,
+                                user.matchedUser.profile.userAvatar,
+                                user.matchedUser.profile.aboutMe,
+                                user.matchedUser.profile.ranking,
+                                user.matchedUser.profile.starRating,
                                 submitStats1,
                                 submitStats2,
                                 submitStats3.concat("+"), // adding + to ease the process of getting profile

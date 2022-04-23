@@ -14,22 +14,22 @@ import { scrollToView } from '../utils/scrollToView';
 
 const Welcome: FC = () => {
 
-    const [profile, setProfile] = React.useState<LeetCodeProfile>(LeetCodeProfileBlockchain)
+    const [profile, setProfile] = React.useState<LeetCodeProfile>(LeetCodeProfileBlockchain);
 
-    const div = useRef(null)
+    const div = useRef(null);
 
     const certificateWrapper = React.createRef();
-    const [transactionID, setTransactionID] = useState('')
-    const [QRurl, setQRurl] = useState("")
-    const [loader, setLoader] = React.useState(false)
-    const [callback, setCallback] = useState(false)
+    const [transactionID, setTransactionID] = useState('');
+    const [QRurl, setQRurl] = useState("");
+    const [loader, setLoader] = React.useState(false);
+    const [callback, setCallback] = useState(false);
 
     useEffect(() => {
 
         if (callback) {
             (async () => {
                 await GetTransaction(transactionID).then(data => {
-                    if(data === false){
+                    if (data === false) {
                         setLoader(false)
                     }
                     else if (data) {
@@ -45,15 +45,15 @@ const Welcome: FC = () => {
     }, [callback]);
 
     const getStarted = () => {
-        scrollToView(div.current.offsetTop)
+        scrollToView(div.current.offsetTop);
     }
 
     function checkIfTransactionID() {
         if (transactionID) {
-            setLoader(true)
-            setCallback(true)
+            setLoader(true);
+            setCallback(true);
         } else {
-            transactionNotProvided()
+            transactionNotProvided();
         }
     }
 
@@ -101,7 +101,7 @@ const Welcome: FC = () => {
                                 timeStamp={profile.timestamp}
                                 problemSolved={(profile.ac_submissin_num == "") ? "" : JSON.parse(profile.ac_submissin_num)}
                                 totalProblems={(profile.all_question_count == "") ? "" : JSON.parse(profile.all_question_count)}
-                                showLoader = {loader}
+                                showLoader={loader}
                             />
                         </div>
                     </div>
