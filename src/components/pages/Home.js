@@ -6,8 +6,8 @@ import Footer from '../Footer';
 function Home() {
     return (
         <>
-            <Welcome />
-            <Footer />
+            <Welcome/>
+            <Footer/>
         </>
     );
 }

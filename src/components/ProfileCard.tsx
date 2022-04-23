@@ -1,41 +1,38 @@
 import React from "react"
-import { DEFAULT_PROFILE_URL, QRSERVER_API } from "../utils/Const";
+import {DEFAULT_PROFILE_URL, QRSERVER_API} from "../utils/Const";
 import './ProfileCard.css'
 
-const SOLANA_LOGO = require('../assets/images/solanaLogoMark.png')
-const LEETDROID_LOGO = require('../assets/images/LeetDroidLogo.png')
+const ProfileCard = props => {
 
-const ProfileCard = profile => {
-
-    var username = (profile.username == "") ? "" : `@${profile.username}`;
-    var picUrl = (profile.picUrl == "") ? DEFAULT_PROFILE_URL : profile.picUrl;
-    var QRurl = (profile.QRurl == "") ? "" : profile.QRurl;
-    var timeStamp = (profile.timeStamp == "") ? "" : profile.timeStamp;
-    var uploadedText = (profile.timeStamp == "") ? "" : `Uploaded profile on ${timeStamp} to Solana Blockchain (Devnet)`
-    var allProblems = (profile.problemSolved == "") ? "" : `${profile.problemSolved[0].count}/${profile.totalProblems[0].count}`
-    var easyProblems = (profile.problemSolved == "") ? "" : `${profile.problemSolved[1].count}/${profile.totalProblems[1].count}`
-    var mediumProblems = (profile.problemSolved == "") ? "" : `${profile.problemSolved[2].count}/${profile.totalProblems[2].count}`
-    var hardProblems = (profile.problemSolved == "") ? "" : `${profile.problemSolved[3].count}/${profile.totalProblems[3].count}`
+    const username = (props.profile.username === "") ? "" : `@${props.profile.username}`;
+    const picUrl = (props.profile.pic_url === "") ? DEFAULT_PROFILE_URL : props.profile.pic_url;
+    const QRurl = (props.QRurl === "") ? "" : props.QRurl;
+    const timeStamp = (props.profile.timestamp === "") ? "" : props.profile.timestamp;
+    const uploadedText = (props.profile.timestamp === "") ? "" : `Uploaded profile on ${timeStamp} to Solana Blockchain (Devnet)`
+    const allProblems = (props.problemSolved === "") ? "" : `${props.problemSolved[0].count}/${props.totalProblems[0].count}`
+    const easyProblems = (props.problemSolved === "") ? "" : `${props.problemSolved[1].count}/${props.totalProblems[1].count}`
+    const mediumProblems = (props.problemSolved === "") ? "" : `${props.problemSolved[2].count}/${props.totalProblems[2].count}`
+    const hardProblems = (props.problemSolved === "") ? "" : `${props.problemSolved[3].count}/${props.totalProblems[3].count}`
 
     return (
         <div className="wrapper">
             <div className="profile-card js-profile-card">
                 <div className="profile-card__img">
-                    <img src={picUrl} alt="profile card"></img>
+                    <img src={picUrl} alt="profile card"/>
                 </div>
 
                 <div className="profile-card__cnt js-profile-cnt">
-                    {profile.showLoader ? (
-                    <div className="fancy-spinner">
-                        <div className="ring"></div>
-                        <div className="ring"></div>
-                        <div className="dot"></div>
-                    </div>
-                    ) : (profile.showLoader)}
+                    {props.showLoader ? (
+                        <div className="fancy-spinner">
+                            <div className="ring"/>
+                            <div className="ring"/>
+                            <div className="dot"/>
+                        </div>
+                    ) : (props.showLoader)}
 
                     <div className="profile-card__username">{username}</div>
-                    <div className="profile-card__name">{profile.name}</div>
-                    <div className="profile-card__txt">{profile.bio}</div>
+                    <div className="profile-card__name">{props.profile.name}</div>
+                    <div className="profile-card__txt">{props.profile.bio}</div>
 
                     <div className="profile-card-inf">
                         <div className="profile-card-inf__item">
@@ -59,14 +56,12 @@ const ProfileCard = profile => {
                         </div>
                     </div>
                 </div>
-                <img id="QR-img" src={`${QRSERVER_API}${QRurl}`} alt="" />
+                <img id="QR-img" src={`${QRSERVER_API}${QRurl}`} alt=""/>
                 <p id="watemark">Solana x LeetDroid © 2022</p>
                 <p id="uploaded-text">{uploadedText} </p>
             </div>
-
         </div>
     )
-
 }
 
 export default ProfileCard;

@@ -1,13 +1,13 @@
-import { LEETCODE_API } from "../utils/Const";
+import {LEETCODE_API} from "../utils/Const";
 import PROFILE_QUERY from "../api/Queries/ProfileQuery";
-import { checkIfUserExist } from "../utils/showConditions";
-import { userDoesNotExistError } from "../utils/Errors";
+import {checkIfUserExist} from "../utils/showConditions";
+import {userDoesNotExistError} from "../utils/Errors";
 
 /**
- * 
- * @param username 
+ *
+ * @param username
  * @returns data if user exists else false.
- * 
+ *
  */
 async function fetchProfile(username: string) {
     const data = await fetch(LEETCODE_API, {
@@ -15,7 +15,7 @@ async function fetchProfile(username: string) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ query: PROFILE_QUERY, variables: { "username": username } })
+        body: JSON.stringify({query: PROFILE_QUERY, variables: {"username": username}})
     }).then(async response => await response.json());
 
     // check if user exists
@@ -23,7 +23,7 @@ async function fetchProfile(username: string) {
         // log the response
         console.log("fetched profile from username", data);
         return data;
-    } else{
+    } else {
         userDoesNotExistError();
         // return false to let UI know to stop showing loader.
         return false;

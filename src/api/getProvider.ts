@@ -1,9 +1,9 @@
-import { Provider } from "@project-serum/anchor";
-import { Connection } from "@solana/web3.js";
-import { DEVNET_API, processed } from "../utils/Const";
+import {Provider} from "@project-serum/anchor";
+import {Connection} from "@solana/web3.js";
+import {DEVNET_API, processed} from "../utils/Const";
 
 /**
- * 
+ *
  * @returns provider to the caller.
  */
 export default function getProvider(wallet) {
@@ -14,8 +14,7 @@ export default function getProvider(wallet) {
     /* Create the provider and return it to the caller */
     const connection = new Connection(DEVNET_API, processed)
 
-    const provider = new Provider(
-        connection, wallet, { "preflightCommitment": processed },
-    );
-    return provider
+    return new Provider(
+        connection, wallet, {"preflightCommitment": processed},
+    )
 }

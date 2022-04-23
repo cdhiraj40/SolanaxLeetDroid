@@ -101,12 +101,13 @@ struct LeetcodeAccount {
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
-    #[account(init, payer = author, space = 8+1000)]
+    #[account(init, payer = author, space = 8 + 1000)]
     pub profile: Account<'info, LeetCodeAccount>,
     #[account(mut)] // we are going to mutate the amount of money in their account.
     pub author: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
+
 #[derive(Accounts)]
 pub struct SendProfile<'info> {
     #[account(init, payer = author, space = LeetCodeAccount::LEN)]

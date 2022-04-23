@@ -1,18 +1,17 @@
-import { generalError } from "./Errors";
+import {generalError} from "./Errors";
 
 /**
  * show solana explorer button
  * if showSolanaExplorer is true
- * dont show if showSolanaExplorer is false
-*/ 
+ * don't show if showSolanaExplorer is false
+ */
 export function canShowSolanaExplorer(showSolanaExplorer: Boolean) {
-    var button = document.getElementById('solana-explorer');
+    const button = document.getElementById('solana-explorer');
     if (button) {
         if (showSolanaExplorer) {
             button.style.visibility = "visible";
             button.style.display = "inline";
-        }
-        else {
+        } else {
             button.style.visibility = "hidden";
             button.style.display = "none";
         }
@@ -22,16 +21,15 @@ export function canShowSolanaExplorer(showSolanaExplorer: Boolean) {
 /**
  * show uploaded text on profile page.
  * if canShowUploadedText is true
- * dont show if canShowUploadedText is false
-*/ 
+ * don't show if canShowUploadedText is false
+ */
 export function showUploadedText(canShowUploadedText: Boolean) {
-    var div = document.getElementById('text');
+    const div = document.getElementById('text');
     if (div) {
         if (canShowUploadedText) {
             div.style.visibility = "visible";
             div.style.display = "inline";
-        }
-        else {
+        } else {
             div.style.visibility = "hidden";
             div.style.display = "none";
         }
@@ -41,16 +39,15 @@ export function showUploadedText(canShowUploadedText: Boolean) {
 /**
  * show uploaded text on profile card
  * if canShowUploadedText is true
- * dont show if canShowUploadedText is false
-*/ 
+ * don't show if canShowUploadedText is false
+ */
 export function showUploadedTextCard(canShowUploadedText: Boolean) {
-    var div = document.getElementById('uploaded-text');
+    const div = document.getElementById('uploaded-text');
     if (div) {
         if (canShowUploadedText) {
             div.style.visibility = "visible";
             div.style.display = "inline";
-        }
-        else {
+        } else {
             div.style.visibility = "hidden";
             div.style.display = "none";
         }
@@ -60,11 +57,11 @@ export function showUploadedTextCard(canShowUploadedText: Boolean) {
 /**
  * check if user exist
  * returns true if exists
- * return false if does not exists 
-*/ 
+ * return false if it does not exist
+ */
 export async function checkIfUserExist(userData) {
     if (userData.data?.matchedUser === null) {
-        if (userData.errors?.[0]?.message.toString() == "That user does not exist.") {
+        if (userData.errors?.[0]?.message.toString() === "That user does not exist.") {
             console.log("user does not exist");
             return false;
         } else {

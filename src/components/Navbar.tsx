@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
-import { Button } from './Button';
+import React, {useState, useEffect} from 'react'
+import {Link} from 'react-router-dom';
+import {Button} from './Button';
 import './Navbar.css'
 import {GITHUB_PROJECT_URL} from '../utils/Const'
+
 function Navbar() {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
@@ -44,7 +45,7 @@ function Navbar() {
             <nav className={navbar ? 'navbar active' : 'navbar'}>
                 <div className="navbar-container">
                     <div className="menu-icon" onClick={handleClick}>
-                        <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
+                        <i className={click ? 'fas fa-times' : 'fas fa-bars'}/>
                     </div>
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                         <li className='nav-item'>
@@ -59,7 +60,8 @@ function Navbar() {
                         </li>
                     </ul>
                     {/* Navbar Mobile Buttons */}
-                    {<Button id = "how-to-use" buttonStyle="btn--outline" buttonSize='btn--medium' type="dark" to='/how-to-use' onClick={undefined} >How to use</Button>}
+                    {<Button id="how-to-use" buttonStyle="btn--outline" buttonSize='btn--medium' type="dark"
+                             to='/how-to-use' onClick={undefined}>How to use</Button>}
                 </div>
             </nav>
         </>

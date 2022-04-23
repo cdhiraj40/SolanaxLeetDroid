@@ -61,7 +61,7 @@ export interface RootObject {
 export interface LeetCodeProfile {
     username: string;
     name: string;
-    pic_url:string
+    pic_url: string
     bio: string;
     ranking: string;
     stars: number;

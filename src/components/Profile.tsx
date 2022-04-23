@@ -2,9 +2,8 @@ import { Button } from "./Button";
 require("../App.css");
 import "./Profile.css"
 import videos from "../assets/videos/welcome.mp4";
-import { RootObject } from "../api/Interfaces/LeetCodeProfile"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { ConnectionProvider, useAnchorWallet, WalletProvider } from "@solana/wallet-adapter-react";
+import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import {
     LedgerWalletAdapter,
@@ -14,16 +13,11 @@ import {
     SolletExtensionWalletAdapter,
     SolletWalletAdapter
 } from "@solana/wallet-adapter-wallets";
-import * as anchor from "@project-serum/anchor";
 
-import {
-    Program, Provider, web3, BN,
-} from "@project-serum/anchor";
-import { clusterApiUrl, Connection } from "@solana/web3.js";
+import { clusterApiUrl } from "@solana/web3.js";
 import React, { FC, ReactNode, useEffect, useMemo, useRef } from "react";
-import idl from "../utils/idl.json"
 import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../utils/Errors";
-import { DEVNET_API, processed, SOLANA_EXPLORER_URL } from "../utils/Const";
+import { profileAddedText, profileAddedTextTsx, SOLANA_EXPLORER_URL } from "../utils/Const";
 import fetchProfile from "../api/fetchProfile";
 import siteLogo from "../assets/images/main_logo.png";
 import ProfileCard from "./ProfileCard";
@@ -31,6 +25,9 @@ import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions
 import { scrollToView } from "../utils/scrollToView";
 import getProvider from "../api/getProvider";
 import getAnchorWallet from "../api/getAnchorWallet";
+import { LeetCodeProfile } from '../api/Interfaces/LeetCodeProfile';
+import LeetCodeProfileBlockchain from "../api/Queries/LeetCodeProfile";
+import sendProfile from "../api/sendProfile";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -45,15 +42,13 @@ const Profile: FC = () => {
 export default Profile;
 
 const Context: FC<{ children: ReactNode }> = ({ children }) => {
-    // The network can be set to "devnet", "testnet", or "mainnet-beta".
+    // The Wallet network is set to "devnet".
     const network = WalletAdapterNetwork.Devnet;
 
-    // You can also provide a custom RPC endpoint.
+    // We can also provide a custom RPC endpoint.
     const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-    // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
-    // Only the wallets you configure here will be compiled into your application, and only the dependencies
-    // of wallets that your users connect to will be loaded.
+    // wallet that are compiled into the application 
     const wallets = useMemo(
         () => [
             new PhantomWalletAdapter(),
@@ -78,6 +73,9 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 const Content: FC = () => {
 
     const [transactionID, setTransactionID] = React.useState("")
+
+    const [profile, setProfileCard] = React.useState<LeetCodeProfile>(LeetCodeProfileBlockchain);
+
     const [profileUsername, setProfileUsername] = React.useState("")
     const [profileName, setProfileName] = React.useState("")
     const [profileBio, setProfileBio] = React.useState("")
@@ -87,85 +85,54 @@ const Content: FC = () => {
     const [profileProblemSolved, setProfileProblemSolved] = React.useState<string>("")
     const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<string>("")
     const [profilePictureUrl, setProfilePictureUrl] = React.useState("")
-    const [data, setData] = React.useState<RootObject>(null)
+
     const [click, setClick] = React.useState(false)
     const [loader, setLoader] = React.useState(false)
     const username = useRef(null)
     const div = useRef(null)
 
-    function checkIfProfileFetched() {
+    const wallet = getAnchorWallet()
+    const provider = getProvider(wallet)
+
+    async function checkIfProfileFetched() {
         if (profileUsername) {
-            sendProfile()
+            if (!provider) {
+                walletNotProvided()
+                scrollToView(div.current.offsetTop);
+
+                console.error("Provider is null")
+                return
+            } else {
+                const tsx = await sendProfile(provider, profileUsername, profileName, profilePictureUrl, profileBio, profileRanking, profileStars, profileTotalProblems, profileCorrectProblemSolved)
+
+                setTransactionID(tsx);
+                scrollToView(div.current.offsetTop);
+
+                // show uploaded text and verify buttons
+                canShowSolanaExplorer(true);
+                showUploadedText(true);
+            }
+
         } else {
             profileNotFetched()
         }
-    }
-
-    const wallet = getAnchorWallet()
-
-    async function sendProfile() {
-        const baseAccount = web3.Keypair.generate()
-        const key = baseAccount.publicKey
-        const provider = getProvider(wallet)
-
-        if (!provider) {
-            walletNotProvided()
-            scrollToView(div.current.offsetTop);
-            
-            console.error("Provider is null")
-            return
-        }
-
-        /* Create the program interface combining the idl, program IDL, and provider" */
-        const jsonString = JSON.stringify(idl);
-        const idlJSON = JSON.parse(jsonString);
-
-        const program = new Program(idlJSON, idl.metadata.address, provider);
-
-        const tsx = await program.rpc.sendProfile(profileUsername.substring(0, 50), profileName, profilePictureUrl, profileBio, profileRanking, 1, 0.0, profileStars, profileTotalProblems, profileCorrectProblemSolved, {
-            accounts: {
-                // account share...
-                profile: baseAccount.publicKey,
-                author: program.provider.wallet.publicKey,
-                systemProgram: anchor.web3.SystemProgram.programId,
-            },
-            signers:
-                // Key pairs of signers here...
-                [baseAccount],
-        });
-
-        // log the transaction ID
-        console.log("transaction ID:", tsx)
-
-        setTransactionID(tsx);
-        scrollToView(div.current.offsetTop);
-
-        // show uploaded text and verify buttons
-        canShowSolanaExplorer(true);
-        showUploadedText(true);
-
-        // After sending the transaction to the blockchain.
-        // Fetch the account details of the created LeetDroid account.
-        const leetdroidAccount = await program.account.leetCodeAccount.fetch(baseAccount.publicKey);
-        console.log("account:", leetdroidAccount);
     }
 
     useEffect(() => {
         if (click) {
             (async () => {
                 await fetchProfile(username.current.value)
-                    .then(data => {
-                        setData(data);
-
-                        if (data) {
+                    .then(response => {
+                        if (response) {
                             // using a constant to increase readability
-                            const user  = data.data;
+                            const user = response.data;
 
                             // stringify the submit stats 
-                            const submitStats1 = JSON.stringify(user.allQuestionsCount)
-                            const submitStats2 = JSON.stringify(user.matchedUser.submitStats.totalSubmissionNum)
-                            const submitStats3 = JSON.stringify(user.matchedUser.submitStats.acSubmissionNum)
-                            console.log("stringified submitStats:", submitStats1, submitStats2, submitStats3);
+                            setProfileTotalProblems(JSON.stringify(user.allQuestionsCount))
+                            setProfileProblemSolved(JSON.stringify(user.matchedUser.submitStats.totalSubmissionNum))
+
+                            // adding + to ease the process of getting profile from solana-contract logs.
+                            setProfileCorrectProblemSolved(JSON.stringify(user.matchedUser.submitStats.acSubmissionNum).concat("+"))
 
                             setLoader(false)
                             setProfile(
@@ -175,10 +142,6 @@ const Content: FC = () => {
                                 user.matchedUser.profile.aboutMe,
                                 user.matchedUser.profile.ranking,
                                 user.matchedUser.profile.starRating,
-                                submitStats1,
-                                submitStats2,
-                                submitStats3.concat("+"), // adding + to ease the process of getting profile
-                                // from solana-contract logs. 
                             )
                         } else {
                             setLoader(false)
@@ -188,47 +151,39 @@ const Content: FC = () => {
                     .catch(err => console.warn(err))
 
                 async function setProfile(
-                    username: React.SetStateAction<string>,
-                    name: React.SetStateAction<string>,
-                    profilePicUrl: React.SetStateAction<string>,
-                    aboutMe: React.SetStateAction<string>,
-                    ranking: { toString: () => React.SetStateAction<string>; },
-                    rating: React.SetStateAction<number>,
-                    allQuestionsCount: React.SetStateAction<string>,
-                    totalSubmissionNum: React.SetStateAction<string>,
-                    acSubmissionNum: React.SetStateAction<string>,
+                    username: string,
+                    name: string,
+                    profilePicUrl: string,
+                    aboutMe: string,
+                    ranking: string,
+                    rating: number,
                 ) {
-                    if (username) {
-                        setProfileUsername(username)
+                    setProfileUsername(username)
+                    setProfileName(name)
+                    setProfilePictureUrl(profilePicUrl)
+                    setProfileBio(aboutMe)
+                    setProfileRanking(ranking.toString())
+                    setProfileStars(rating)
+
+                    const profile = {
+                        username: username.toString(),
+                        name: name.toString(),
+                        pic_url: profilePicUrl.toString(),
+                        bio: aboutMe.toString(),
+                        ranking: ranking.toString().toString(),
+                        stars: rating,
+                        problemSolved: 1,
+                        acceptanceRate: 0.0,
+                        timestamp: "",
+                        all_question_count: profileProblemSolved.toString(),
+                        total_submission_num: profileTotalProblems.toString(),
+                        ac_submissin_num: profileCorrectProblemSolved.toString()
                     }
-                    if (name) {
-                        setProfileName(name)
-                    }
-                    if (profilePicUrl) {
-                        setProfilePictureUrl(profilePicUrl)
-                    }
-                    if (aboutMe) {
-                        setProfileBio(aboutMe)
-                    }
-                    if (ranking) {
-                        setProfileRanking(ranking.toString())
-                    }
-                    if (rating) {
-                        setProfileStars(rating)
-                    }
-                    if (allQuestionsCount) {
-                        setProfileTotalProblems(allQuestionsCount)
-                    }
-                    if (totalSubmissionNum) {
-                        setProfileProblemSolved(totalSubmissionNum)
-                    }
-                    if (acSubmissionNum) {
-                        setProfileCorrectProblemSolved(acSubmissionNum)
-                    }
+                    setProfileCard(profile)
                 }
             })();
         }
-        setClick(false)
+        setClick(false);
     }, [click]);
 
 
@@ -239,18 +194,13 @@ const Content: FC = () => {
             setLoader(true)
             setClick(true)
         } else {
-            usernameNotProvided()
+            usernameNotProvided();
         }
     }
 
     function openSolanaExplorer() {
         window.open(`${SOLANA_EXPLORER_URL}${transactionID}?cluster=devnet`)
     }
-
-    const text1 = "Your LeetCode Profile has been added to the Blockchain !!"
-    const text2 = `You can get the profile card by pasting the below mentioned Transaction ID on the Homepage.
-    You can also verify this transaction by clicking below button. Thank you for uploading your leetcode profile on the Blockchain.
-    Transaction ID: ${transactionID}`
 
 
     return (
@@ -260,7 +210,7 @@ const Content: FC = () => {
                 <img className="site-logo" src={siteLogo}></img>
                 <div className="uploaded-text">
                     <h3 id="heading">Upload Your LeetCode Profile on<br></br>Solana Blockchain (Devnet)</h3>
-                    <h3 id="text">{text1}<br></br>{text2}</h3>
+                    <h3 id="text">{profileAddedText}<br></br>{profileAddedTextTsx(transactionID)}</h3>
                 </div>
                 <div className="wallet-btns">
                     <WalletMultiButton className="wallet" ></WalletMultiButton>
@@ -273,12 +223,8 @@ const Content: FC = () => {
                 <div className="cert-container">
                     <div id="certificateWrapper-exp">
                         <ProfileCard
-                            timeStamp={""}
+                            profile={profile}
                             QRurl={""}
-                            username={profileUsername}
-                            picUrl={profilePictureUrl}
-                            name={profileName}
-                            bio={profileBio}
                             problemSolved={(profileCorrectProblemSolved == "") ? "" : JSON.parse(profileCorrectProblemSolved.substring(0, profileCorrectProblemSolved.length - 1))}
                             totalProblems={(profileTotalProblems == "") ? "" : JSON.parse(profileTotalProblems)}
                             showLoader={loader}

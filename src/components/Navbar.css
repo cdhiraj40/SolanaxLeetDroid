@@ -126,6 +126,7 @@
     .NavbarItems {
         position: relative;
     }
+
     .nav-menu {
         display: flex;
         flex-direction: column;
@@ -137,6 +138,7 @@
         opacity: 1;
         transition: all 0.5s ease;
     }
+
     .nav-menu.active {
         background: #242222;
         left: 0;
@@ -144,21 +146,25 @@
         transition: all 0.5s ease;
         z-index: 1;
     }
+
     .nav-links {
         text-align: center;
         padding: 2rem;
         width: 100%;
         display: table;
     }
+
     .nav-links:hover {
         border-radius: 0;
     }
+
     .navbar-logo {
         position: absolute;
-        top: 0px;
+        top: 0;
         left: -60px;
         transform: translate(25%, 50%);
     }
+
     .menu-icon {
         display: block;
         position: absolute;
@@ -168,10 +174,12 @@
         font-size: 1.8rem;
         cursor: pointer;
     }
+
     .fa-times {
         color: #fff;
         font-size: 2rem;
     }
+
     .nav-links-mobile {
         display: block;
         text-align: center;
@@ -186,11 +194,13 @@
         border: 1px solid #fff;
         transition: all 0.3s ease-out;
     }
+
     .nav-links-mobile:hover {
         background: #fff;
         color: #242424;
         transition: 250ms;
     }
+
     .navbar-icon {
         position: absolute;
         top: -60px;

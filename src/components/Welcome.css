@@ -20,7 +20,7 @@ video {
 .input-container {
     height: 100vh;
     width: 100%;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -28,13 +28,13 @@ video {
     margin-top: 20px;
 }
 
-.welcome-container>h1 {
+.welcome-container > h1 {
     color: #fff;
     font-size: 100px;
     margin-top: -100px;
 }
 
-.welcome-container>p {
+.welcome-container > p {
     margin-top: 8px;
     color: #fff;
     font-size: 32px;
@@ -48,6 +48,7 @@ video {
 .submit-btns .btn {
     margin: 6px;
 }
+
 .welcome-btns {
     margin-top: 32px;
 }
@@ -55,7 +56,6 @@ video {
 .welcome-btns .btn {
     margin: 6px;
 }
-
 
 .fa-github {
     margin-left: 4px;
@@ -68,44 +68,41 @@ video {
     width: 175px;
 }
 
-label{
+label {
     color: white;
     font-family: "Lucida Console", Monaco, monospace;
-    text-align: center; 
+    text-align: center;
 }
-input[type=text]{
-    width:100%;
-    border-radius:4px;
-    margin:8px 0;
-    outline:none;
-    box-sizing:border-box;
-    transition:.3s;
+
+input[type=text] {
+    width: 100%;
+    margin: 8px 0;
+    outline: none;
+    box-sizing: border-box;
     align-items: center;
     font-family: "Lucida Console", Monaco, monospace;
     transition: all 0.75s ease-in-out 0s;
-    border: 2px solid rgb(216, 2, 134);
     border-radius: 0;
-    padding: 18px 36px;
     padding: 8px 20px;
     color: white;
-    text-align: center; 
+    text-align: center;
     background: transparent;
     border: 1px solid rgb(216, 2, 134);
     box-shadow: inset 0 0 0 0 #D80286;
-  }
-  
-  input:focus{
-      outline: none;
-      border-bottom: 2px solid #14F195;
-      border-left: 2px solid #9945FF;
-      border-right: 2px solid #03E1FF;
-      border-top: 2px solid #DC1FFF;
-      transform-origin: 0 100% 0;
-    }
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 2px solid #14F195;
+    border-left: 2px solid #9945FF;
+    border-right: 2px solid #03E1FF;
+    border-top: 2px solid #DC1FFF;
+    transform-origin: 0 100% 0;
+}
 
 
 @media screen and (max-width: 960px) {
-    .welcome-container>h1 {
+    .welcome-container > h1 {
         font-size: 70px;
         margin-top: -150px;
     }
@@ -117,12 +114,12 @@ input[type=text]{
 
 
 @media screen and (max-width: 768px) {
-    .welcome-container>h1 {
+    .welcome-container > h1 {
         font-size: 50px;
         margin-top: -100px;
     }
 
-    .welcome-container>p {
+    .welcome-container > p {
         margin-top: 30px;
     }
 

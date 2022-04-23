@@ -10,6 +10,7 @@ video {
 .cert-container {
     margin-bottom: 3%;
 }
+
 .wallet-btns {
     display: flex;
     margin-bottom: 10%;
@@ -21,9 +22,10 @@ video {
 }
 
 .wallet-btns #solana-explorer {
-    visibility:hidden;
+    visibility: hidden;
     display: none;
 }
+
 .wallet-adapter-button.wallet {
     background-color: transparent;
     font-size: 16px;
@@ -36,7 +38,6 @@ video {
     letter-spacing: 1px;
     cursor: pointer;
     box-shadow: inset 0 0 0 0 #9945FF;
-    background-color: linear-gradient(to right, #DC1FFF 0%, #03E1FF 51%, #14F195 33%);
     -webkit-transition: ease-out 0.8s;
     -moz-transition: ease-out 0.8s;
     transition: ease-out 0.8s;
@@ -66,11 +67,11 @@ video {
     margin-top: 20%;
 }
 
- .uploaded-text #heading {
+.uploaded-text #heading {
     font-size: xx-large;
 }
 
- .uploaded-text #text {
+.uploaded-text #text {
     font-size: large;
     visibility: hidden;
     display: none;
@@ -102,17 +103,13 @@ label {
 
 input[type=text] {
     width: 100%;
-    border-radius: 4px;
     margin: 8px 0;
     outline: none;
     box-sizing: border-box;
-    transition: .3s;
     align-items: center;
     font-family: "Lucida Console", Monaco, monospace;
     transition: all 0.75s ease-in-out 0s;
-    border: 2px solid rgb(216, 2, 134);
     border-radius: 0;
-    padding: 18px 36px;
     padding: 8px 20px;
     color: white;
     text-align: center;
@@ -131,30 +128,35 @@ input:focus {
 }
 
 @media screen and (max-width: 960px) {
-    .welcome-container>h1 {
+    .welcome-container > h1 {
         font-size: 70px;
         margin-top: -150px;
     }
+
     .welcome-img {
         margin-bottom: 150px;
     }
 }
 
 @media screen and (max-width: 768px) {
-    .welcome-container>h1 {
+    .welcome-container > h1 {
         font-size: 50px;
         margin-top: -100px;
     }
-    .welcome-container>p {
+
+    .welcome-container > p {
         margin-top: 30px;
     }
+
     .btn-mobile {
         display: block;
         text-decoration: none;
     }
+
     .btn {
         width: 100%;
     }
+
     .welcome-img {
         margin-bottom: 100px;
     }
