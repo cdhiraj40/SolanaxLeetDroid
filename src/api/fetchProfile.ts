@@ -3,6 +3,12 @@ import PROFILE_QUERY from "../api/Queries/ProfileQuery";
 import { checkIfUserExist } from "../utils/showConditions";
 import { userDoesNotExistError } from "../utils/Errors";
 
+/**
+ * 
+ * @param username 
+ * @returns data if user exists else false.
+ * 
+ */
 async function fetchProfile(username: string) {
     const data = await fetch(LEETCODE_API, {
         method: "POST",

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { Button } from './Button';
 import './Navbar.css'
-import {GITHUB_PROJECT_LINK} from '../utils/Const'
+import {GITHUB_PROJECT_URL} from '../utils/Const'
 function Navbar() {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
@@ -34,7 +34,7 @@ function Navbar() {
     };
 
     const openGithub = () => {
-        window.open(GITHUB_PROJECT_LINK)
+        window.open(GITHUB_PROJECT_URL)
     }
 
     window.addEventListener('scroll', changeBackground)

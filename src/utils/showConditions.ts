@@ -73,7 +73,7 @@ export async function checkIfUserExist(userData) {
             return false;
         }
     } else {
-        console.log("exist")
+        console.log("user exists")
         return true;
     }
 }

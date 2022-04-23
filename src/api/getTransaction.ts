@@ -1,6 +1,11 @@
 import { DEVNET_API } from "../utils/Const";
 import { tryAgainError } from "../utils/Errors";
 
+/**
+ * 
+ * @param transactionID 
+ * @returns transaction else if anything goes wrong then false.
+ */
 async function GetTransaction(transactionID) {
 
     var myHeaders = new Headers();

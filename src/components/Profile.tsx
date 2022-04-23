@@ -23,13 +23,14 @@ import { clusterApiUrl, Connection } from "@solana/web3.js";
 import React, { FC, ReactNode, useEffect, useMemo, useRef } from "react";
 import idl from "../utils/idl.json"
 import { profileNotFetched, usernameNotProvided, walletNotProvided } from "../utils/Errors";
-import { DEVNET_API, processed, SOLANA_EXPLORER } from "../utils/Const";
+import { DEVNET_API, processed, SOLANA_EXPLORER_URL } from "../utils/Const";
 import fetchProfile from "../api/fetchProfile";
 import siteLogo from "../assets/images/main_logo.png";
 import ProfileCard from "./ProfileCard";
 import { canShowSolanaExplorer, showUploadedText } from "../utils/showConditions";
 import { scrollToView } from "../utils/scrollToView";
 import getProvider from "../api/getProvider";
+import getAnchorWallet from "../api/getAnchorWallet";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -100,7 +101,7 @@ const Content: FC = () => {
         }
     }
 
-    const wallet = useAnchorWallet();
+    const wallet = getAnchorWallet()
 
     async function sendProfile() {
         const baseAccount = web3.Keypair.generate()
@@ -109,6 +110,8 @@ const Content: FC = () => {
 
         if (!provider) {
             walletNotProvided()
+            scrollToView(div.current.offsetTop);
+            
             console.error("Provider is null")
             return
         }
@@ -241,7 +244,7 @@ const Content: FC = () => {
     }
 
     function openSolanaExplorer() {
-        window.open(`${SOLANA_EXPLORER}${transactionID}?cluster=devnet`)
+        window.open(`${SOLANA_EXPLORER_URL}${transactionID}?cluster=devnet`)
     }
 
     const text1 = "Your LeetCode Profile has been added to the Blockchain !!"
@@ -287,4 +290,3 @@ const Content: FC = () => {
         </div>
     );
 }
-

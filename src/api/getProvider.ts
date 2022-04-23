@@ -2,6 +2,10 @@ import { Provider } from "@project-serum/anchor";
 import { Connection } from "@solana/web3.js";
 import { DEVNET_API, processed } from "../utils/Const";
 
+/**
+ * 
+ * @returns provider to the caller.
+ */
 export default function getProvider(wallet) {
     if (!wallet) {
         return null;

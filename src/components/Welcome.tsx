@@ -5,12 +5,12 @@ require('../App.css');
 import videos from "../assets/videos/welcome.mp4";
 import siteLogo from "../assets/images/main_logo.png";
 import { LeetCodeProfile } from '../api/Interfaces/LeetCodeProfile';
-import { exportComponentAsJPEG } from 'react-component-export-image';
 import { transactionNotProvided } from '../utils/Errors';
 import LeetCodeProfileBlockchain from '../api/Queries/LeetCodeProfile';
 import GetTransaction from '../api/getTransaction';
 import ProfileCard from './ProfileCard';
 import { scrollToView } from '../utils/scrollToView';
+import downloadProfile from '../utils/downloadProfile';
 
 const Welcome: FC = () => {
 
@@ -58,15 +58,6 @@ const Welcome: FC = () => {
     }
 
 
-    function downloadProfile(element) {
-        element.preventDefault();
-        exportComponentAsJPEG(certificateWrapper as React.RefObject<HTMLDivElement>, {
-            html2CanvasOptions: { backgroundColor: null },
-            fileName: "myLeetCodeProfile.jpg"
-        });
-    }
-
-
     return (
         <div className="Welcome">
             <div className='welcome-container'>
@@ -108,7 +99,7 @@ const Welcome: FC = () => {
                 </div>
                 <div className="download-btn">
                     <Button id="download-profile" buttonStyle='btn--outline' buttonSize='btn--medium' type="light" to="/" onClick={(element: any) => {
-                        downloadProfile(element)
+                        downloadProfile(certificateWrapper, element)
                     }}>Download</Button>
                 </div>
             </div>
