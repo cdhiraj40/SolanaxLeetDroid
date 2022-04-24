@@ -3,20 +3,18 @@ import {Program} from "@project-serum/anchor";
 import {SolanaLeetdroid} from "../target/types/solana_leetdroid";
 import * as assert from "assert";
 import * as bs58 from "bs58";
-import {useAnchorWallet} from 'solana-wallets-vue'
 
 describe("solana-leetdroid", () => {
 
-    const provider = anchor.Provider.local("http://127.0.0.1:8899");
-    anchor.setProvider(provider);
-    // const wallet = useAnchorWallet()
-    // anchor.setProvider(anchor.Provider.env());
+    // const provider = anchor.Provider.local("http://127.0.0.1:8899");
+    // anchor.setProvider(provider);
+    anchor.setProvider(anchor.Provider.env());
     const program = anchor.workspace.SolanaLeetdroid as Program<SolanaLeetdroid>;
 
     it('can create a new profile', async () => {
         const profile = anchor.web3.Keypair.generate();
 
-        await program.rpc.sendProfile('cdhiraj40', 'Dhiraj', 'Hey this is Dhiraj', '1001', 10, 55.56, 2, {
+        await program.rpc.sendProfile('cdhiraj40', 'Dhiraj','https://picsum.photos/200', 'Hey this is Dhiraj', '1001', 10, 55.56, 2,"146","2251", {
             accounts: {
                 // account share...
                 profile: profile.publicKey,
@@ -48,9 +46,9 @@ describe("solana-leetdroid", () => {
         // Call the "SendProfile" instruction without a bio.
         const profile = anchor.web3.Keypair.generate();
 
-        await program.rpc.sendProfile('cdhiraj40', 'Dman', '', '11001', 110, 69.56, 2, {
+        await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', '', '11001', 110, 69.56, 2,"146","2251", {
             accounts: {
-                // Aaccountshere...
+                // Account share...
                 profile: profile.publicKey,
                 author: program.provider.wallet.publicKey,
                 systemProgram: anchor.web3.SystemProgram.programId,
@@ -89,7 +87,7 @@ describe("solana-leetdroid", () => {
         // Call the "SendProfile" instruction on behalf of this other user.
         const profile = anchor.web3.Keypair.generate();
 
-        await program.rpc.sendProfile('cdhiraj40', 'Dman', 'Hey this is Dman', '11001', 110, 69.56, 2, {
+        await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', 'Hey this is Dman', '11001', 110, 69.56, 2,"146","2251", {
             accounts: {
                 // Account share...
                 profile: profile.publicKey,
@@ -122,7 +120,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const usernameWith51Chars = 'a'.repeat(51);
-            await program.rpc.sendProfile(usernameWith51Chars, 'Dman', 'Hey this is Dman', '11001', 110, 69.56, 2, {
+            await program.rpc.sendProfile(usernameWith51Chars, 'Dman','https://picsum.photos/200', 'Hey this is Dman', '11001', 110, 69.56, 2,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,
@@ -141,7 +139,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const nameWith51Chars = 'a'.repeat(51);
-            await program.rpc.sendProfile('cdhiraj40', nameWith51Chars, 'Hey this is Dman', '11001', 110, 69.56, 2, {
+            await program.rpc.sendProfile('cdhiraj40', nameWith51Chars,'https://picsum.photos/200', 'Hey this is Dman', '11001', 110, 69.56, 2,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,
@@ -160,7 +158,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const bioWith201Chars = 'a'.repeat(201);
-            await program.rpc.sendProfile('cdhiraj40', 'dman', bioWith201Chars, '11001', 110, 69.56, 2, {
+            await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', bioWith201Chars, '11001', 110, 69.56, 2,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,
@@ -179,7 +177,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const ranking = '1'.repeat(11);
-            await program.rpc.sendProfile('cdhiraj40', 'dman', 'Hey this is Dman', ranking, 110, 69.56, 2, {
+            await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', 'Hey this is Dman', ranking, 110, 69.56, 2,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,
@@ -198,7 +196,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const problemSolved = 1002112;
-            await program.rpc.sendProfile('cdhiraj40', 'dman', 'Hey this is Dman', "10021", problemSolved, 69.56, 2, {
+            await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', 'Hey this is Dman', '11001', problemSolved, 69.56, 2,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,
@@ -217,7 +215,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const acceptanceRate = 101.00;
-            await program.rpc.sendProfile('cdhiraj40', 'dman', 'Hey this is Dman', "1001", 132, acceptanceRate, 2, {
+            await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', 'Hey this is Dman', '11001', 110, acceptanceRate, 2,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,
@@ -236,7 +234,7 @@ describe("solana-leetdroid", () => {
             const profile = anchor.web3.Keypair.generate();
 
             const stars = 6;
-            await program.rpc.sendProfile('cdhiraj40', 'dman', 'Hey this is Dman', "1001", 132, 69.21, stars, {
+            await program.rpc.sendProfile('cdhiraj40', 'Dman','https://picsum.photos/200', 'Hey this is Dman', '11001', 110, 69.56, stars,"146","2251", {
                 accounts: {
                     profile: profile.publicKey,
                     author: program.provider.wallet.publicKey,

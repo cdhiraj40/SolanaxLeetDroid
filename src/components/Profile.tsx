@@ -2,7 +2,7 @@ import {Button} from "./Button";
 import "./Profile.css"
 import videos from "../assets/videos/welcome.mp4";
 import {WalletAdapterNetwork} from "@solana/wallet-adapter-base";
-import {ConnectionProvider, WalletProvider} from "@solana/wallet-adapter-react";
+import {ConnectionProvider, useAnchorWallet, WalletProvider} from "@solana/wallet-adapter-react";
 import {WalletModalProvider, WalletMultiButton} from "@solana/wallet-adapter-react-ui";
 import {
     LedgerWalletAdapter,
@@ -23,7 +23,6 @@ import ProfileCard from "./ProfileCard";
 import {canShowCopyTsxID, canShowSolanaExplorer, showUploadedText} from "../utils/showConditions";
 import {scrollToView} from "../utils/scrollToView";
 import getProvider from "../api/getProvider";
-import getAnchorWallet from "../api/getAnchorWallet";
 import {LeetCodeProfile} from '../api/Interfaces/LeetCodeProfile';
 import LeetCodeProfileBlockchain from "../api/Queries/LeetCodeProfile";
 import sendProfile from "../api/sendProfile";
@@ -87,9 +86,9 @@ const Content = () => {
     const [profileBio, setProfileBio] = React.useState("")
     const [profileRanking, setProfileRanking] = React.useState("")
     const [profileStars, setProfileStars] = React.useState(0)
-    const [profileTotalProblems, setProfileTotalProblems] = React.useState<string>("")
-    const [profileProblemSolved, setProfileProblemSolved] = React.useState<string>("")
-    const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState<string>("")
+    const [profileTotalProblems, setProfileTotalProblems] = React.useState("")
+    const [profileProblemSolved, setProfileProblemSolved] = React.useState("")
+    const [profileCorrectProblemSolved, setProfileCorrectProblemSolved] = React.useState("")
     const [profilePictureUrl, setProfilePictureUrl] = React.useState("")
 
     const [click, setClick] = React.useState(false)
@@ -97,14 +96,14 @@ const Content = () => {
     const username = useRef(null)
     const div = useRef(null)
 
-    const wallet = getAnchorWallet()
+    const wallet = useAnchorWallet()
     const provider = getProvider(wallet)
 
     async function checkIfProfileFetched() {
         if (profileUsername) {
             if (!provider) {
-                walletNotProvided()
-                scrollToView(div.current.offsetTop);
+                walletNotProvided() // show toast that wallet not provided
+                scrollToView(div.current.offsetTop); // scroll up to the "select wallet" button
 
                 console.error("Provider is null")
                 return
@@ -112,16 +111,16 @@ const Content = () => {
                 const tsx = await sendProfile(provider, profileUsername, profileName, profilePictureUrl, profileBio, profileRanking, profileStars, profileTotalProblems, profileCorrectProblemSolved)
 
                 setTransactionID(tsx);
-                scrollToView(div.current.offsetTop);
+                scrollToView(div.current.offsetTop); // scroll up to show tsx ID
 
-                // show uploaded text and verify buttons
+                // show uploaded text, copy tsx ID and verify buttons
                 canShowSolanaExplorer(true);
                 canShowCopyTsxID(true);
                 showUploadedText(true);
             }
 
         } else {
-            profileNotFetched()
+            profileNotFetched() // show toast if profile has not been fetched yet
         }
     }
 
@@ -141,7 +140,7 @@ const Content = () => {
                             // adding + to ease the process of getting profile from solana-contract logs.
                             setProfileCorrectProblemSolved(JSON.stringify(user.matchedUser.submitStats.acSubmissionNum).concat("+"))
 
-                            setLoader(false)
+                            setLoader(false) // stop the loader and set the profile.
                             setProfile(
                                 user.matchedUser.username,
                                 user.matchedUser.profile.realName,
@@ -154,7 +153,6 @@ const Content = () => {
                             setLoader(false)
                         }
                     })
-
                     .catch(err => console.warn(err))
 
                 async function setProfile(
@@ -186,19 +184,21 @@ const Content = () => {
                         total_submission_num: profileTotalProblems.toString(),
                         ac_submissin_num: profileCorrectProblemSolved.toString()
                     }
-                    setProfileCard(profile)
+                    setProfileCard(profile) // set the profile for profile card component.
                 }
             })();
         }
-        setClick(false);
+        setClick(false); // setting the click to false so that state can be changed again.
     }, [click]);
 
 
-    function setButtonClick(val: any) {
+    function setButtonClick() {
+        // hide uploaded text, copy tsx ID and verify buttons
         canShowSolanaExplorer(false);
         canShowCopyTsxID(false);
         showUploadedText(false);
 
+        // if username added then get profile else show toast
         if (username.current.value) {
             setLoader(true)
             setClick(true)
@@ -211,7 +211,7 @@ const Content = () => {
         window.open(`${SOLANA_EXPLORER_URL}${transactionID}?cluster=devnet`)
     }
 
-    function onClickCopy(){
+    function onClickCopy() {
         copyText(transactionID).then()
     }
 

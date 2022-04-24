@@ -1,6 +1,6 @@
 import {Button} from './Button';
 import './Welcome.css'
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import videos from "../assets/videos/welcome.mp4";
 import siteLogo from "../assets/images/main_logo.png";
 import {LeetCodeProfile} from '../api/Interfaces/LeetCodeProfile';
@@ -15,19 +15,19 @@ require('../App.css');
 
 const Welcome = () => {
 
-    const [profile, setProfile] = React.useState<LeetCodeProfile>(LeetCodeProfileBlockchain);
+    const [profile, setProfile] = useState<LeetCodeProfile>(LeetCodeProfileBlockchain);
 
     const div = useRef(null);
+    const certificateWrapper = useRef(null);
 
-    const certificateWrapper = React.createRef();
     const [transactionID, setTransactionID] = useState('');
     const [QRurl, setQRurl] = useState("");
-    const [loader, setLoader] = React.useState(false);
-    const [callback, setCallback] = useState(false);
+    const [loader, setLoader] = useState(false);
+    const [click, setClick] = useState(false);
 
     useEffect(() => {
 
-        if (callback) {
+        if (click) {
             (async () => {
                 await GetTransaction(transactionID).then(data => {
                     if (data === false) {
@@ -41,22 +41,22 @@ const Welcome = () => {
 
             })();
         }
-        setCallback(false)
-    }, [callback]);
+        setClick(false) // setting the click to false so that state can be changed again.
+    }, [click]);
 
     const getStarted = () => {
-        scrollToView(div.current.offsetTop);
+        scrollToView(div.current.offsetTop); // scroll to profile card.
     }
 
     function checkIfTransactionID() {
+        // if tsx added then get profile else show toast
         if (transactionID) {
             setLoader(true);
-            setCallback(true);
+            setClick(true);
         } else {
             transactionNotProvided();
         }
     }
-
 
     return (
         <div className="Welcome">
@@ -84,7 +84,7 @@ const Welcome = () => {
                 </div>
 
                 <div className="cert-container">
-                    <div id="downloadWrapper-exp" ref={certificateWrapper as React.RefObject<HTMLDivElement>}>
+                    <div id="downloadWrapper-exp" ref={certificateWrapper}>
                         <div id="certificateWrapper-exp">
                             <ProfileCard
                                 profile={profile}

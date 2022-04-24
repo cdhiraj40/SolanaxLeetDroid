@@ -32,6 +32,7 @@ async function sendProfile(provider: anchor.Provider, profileUsername: string, p
     const leetdroidAccount = await program.account.leetCodeAccount.fetch(baseAccount.publicKey);
     console.log("account:", leetdroidAccount);
 
+    // return the tsx ID
     return tsx;
 }
 

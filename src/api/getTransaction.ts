@@ -27,6 +27,7 @@ async function GetTransaction(transactionID) {
         body: raw,
         redirect: 'follow'
     };
+
     // fetch the transaction
     const data = await fetch(DEVNET_API, requestOptions as RequestInit)
         .then(async response => await response.json())
