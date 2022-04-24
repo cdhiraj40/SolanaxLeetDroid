@@ -13,7 +13,7 @@ import downloadProfile from '../utils/downloadProfile';
 
 require('../App.css');
 
-const Welcome: FC = () => {
+const Welcome = () => {
 
     const [profile, setProfile] = React.useState<LeetCodeProfile>(LeetCodeProfileBlockchain);
 

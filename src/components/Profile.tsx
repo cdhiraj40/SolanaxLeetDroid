@@ -14,7 +14,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 
 import {clusterApiUrl} from "@solana/web3.js";
-import React, {FC, ReactNode, useEffect, useMemo, useRef} from "react";
+import React, {ReactNode, useEffect, useMemo, useRef} from "react";
 import {profileNotFetched, usernameNotProvided, walletNotProvided} from "../utils/Errors";
 import {profileAddedText, profileAddedTextTsx, SOLANA_EXPLORER_URL} from "../utils/Const";
 import fetchProfile from "../api/fetchProfile";
@@ -32,7 +32,7 @@ import copyText from "../utils/copyText";
 require("../App.css");
 require("@solana/wallet-adapter-react-ui/styles.css");
 
-const Profile: FC = () => {
+const Profile = () => {
     return (
         <Context>
             <Content/>
@@ -41,7 +41,13 @@ const Profile: FC = () => {
 };
 export default Profile;
 
-const Context: FC<{ children: ReactNode }> = ({children}) => {
+const Context = (
+    {
+        children
+    }: {
+        children: ReactNode
+    }
+) => {
     // The Wallet network is set to "devnet".
     const network = WalletAdapterNetwork.Devnet;
 
@@ -70,7 +76,7 @@ const Context: FC<{ children: ReactNode }> = ({children}) => {
     );
 };
 
-const Content: FC = () => {
+const Content = () => {
 
     const [transactionID, setTransactionID] = React.useState("")
 
