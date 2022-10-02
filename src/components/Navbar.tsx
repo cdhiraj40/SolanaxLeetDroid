@@ -59,7 +59,7 @@ function Navbar() {
                             </div>
                         </li>
                         <li className='nav-item'>
-                            <div className='nav-links'>
+                            <div>
                             {<Button id="how-to-use" buttonStyle="btn--outline" buttonSize='btn--medium' type="dark"
                              to='/how-to-use' onClick={undefined}>How to use</Button>}
                             </div>
