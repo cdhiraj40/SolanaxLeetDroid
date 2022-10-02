@@ -58,10 +58,14 @@ function Navbar() {
                                 Github
                             </div>
                         </li>
+                        <li className='nav-item'>
+                            <div className='nav-links'>
+                            {<Button id="how-to-use" buttonStyle="btn--outline" buttonSize='btn--medium' type="dark"
+                             to='/how-to-use' onClick={undefined}>How to use</Button>}
+                            </div>
+                        </li>
                     </ul>
                     {/* Navbar Mobile Buttons */}
-                    {<Button id="how-to-use" buttonStyle="btn--outline" buttonSize='btn--medium' type="dark"
-                             to='/how-to-use' onClick={undefined}>How to use</Button>}
                 </div>
             </nav>
         </>
