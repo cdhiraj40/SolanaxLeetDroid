@@ -29,15 +29,19 @@ If you don't have a leetcode account you can create one from [here](https://leet
 
 ## 🛠️ Installation Steps
 
-1. Fork the project
-2. Clone the project
-3. Create a new branch (`git checkout -b new-feature`)
-4. One can find smart contract in the ``program-rust/programs/solana-leetdroid/src/`` directory.
-5. Make your changes and build the program by running ``anchor build``
-6. Once built, connect to any [cluster](https://docs.solana.com/cli/choose-a-cluster) and run the deploy command which you got at the end of build command or just run ``anchor deploy``.
-7. Once all the appropriate changes are done in the files (` git add . `)
-8. Add changes to reflect the changes made (`git commit -m 'commit message'`)
-9. Push to the branch (` git push `)
+<br/>1. Fork the project
+<br/>Go to this page ``https://github.com/cdhiraj40/SolanaxLeetDroid`` and click Fork button.
+<img src ="src/assets/images/fork.png" align="center" hspace="10" vspace="10"><br/>
+<br/>2. Clone the project
+<br/>Copy the https link and clone the project to you local repository (`git clone *https link that you copied*`) Ex.(git clone https://github.com/cdhiraj40/SolanaxLeetDroid)
+<img src ="src/assets/images/clone.png" align="center" hspace="10" vspace="10">
+<br/>3. Create a new branch (`git checkout -b new-feature`)
+<br/>4. One can find smart contract in the ``program-rust/programs/solana-leetdroid/src/`` directory.
+<br/>5. Make your changes and build the program by running ``anchor build``
+<br/>6. Once built, connect to any [cluster](https://docs.solana.com/cli/choose-a-cluster) and run the deploy command which you got at the end of build command or just run ``anchor deploy``.
+<br/>7. Once all the appropriate changes are done in the files (` git add . `)
+<br/>8. Add changes to reflect the changes made (`git commit -m 'commit message'`)
+<br/>9. Push to the branch (` git push `)
 
 ## 👨‍💻 Contributing
 
